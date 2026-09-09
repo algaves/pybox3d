@@ -27,6 +27,16 @@ uv run mypy          # type-check
 uv run python examples/falling_box_demo.py
 ```
 
+## Documentation
+
+Full docs (getting started, API reference, examples) are built with
+[MkDocs](https://www.mkdocs.org/):
+
+```sh
+uv sync --group docs   # install mkdocs + mkdocs-material
+uv run mkdocs serve    # live-reloading preview at http://127.0.0.1:8000
+```
+
 ## Layout
 
 - `libbox3d/` -- the pure-C library (zero Python dependency).
