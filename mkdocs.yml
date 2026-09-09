@@ -41,15 +41,42 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Getting started: getting-started.md
-  - API reference:
-      - Vec3: api/vec3.md
-      - Quat: api/quat.md
-      - Box3D: api/box3d.md
-      - RigidBody: api/rigidbody.md
-      - World: api/world.md
-      - DistanceJoint: api/joint.md
-  - Examples: examples.md
-  - Known limitations: limitations.md
-  - Roadmap: roadmap.md
-  - Changelog: changelog.md
+  - Getting started:
+      - Installation: getting-started/install.md
+      - Quickstart: getting-started/quickstart.md
+      - Documentation: getting-started/documentation.md
+  - Tutorials:
+      - Overview: tutorials/index.md
+      - Dropping a box: tutorials/falling-box.md
+      - A swinging pendulum: tutorials/pendulum.md
+      - A joint chain: tutorials/joint-chain.md
+      - A drifting dumbbell: tutorials/dumbbell.md
+  - Examples:
+      - Overview: examples/index.md
+      - Falling box: examples/falling-box.md
+      - Pendulum joint: examples/pendulum.md
+      - Joint chain: examples/joint-chain.md
+      - Dumbbell: examples/dumbbell.md
+  - Reference:
+      - Modules:
+          - pybox3d: reference/modules/pybox3d.md
+      - Classes:
+          - Vec3: reference/classes/vec3.md
+          - Quat: reference/classes/quat.md
+          - Box3D: reference/classes/box3d.md
+          - RigidBody: reference/classes/rigidbody.md
+          - DistanceJoint: reference/classes/distancejoint.md
+          - World: reference/classes/world.md
+          - ContactInfo: reference/classes/contactinfo.md
+          - RayHit: reference/classes/rayhit.md
+      - Functions:
+          - Vec3: reference/functions/vec3.md
+          - Quat: reference/functions/quat.md
+          - Box3D: reference/functions/box3d.md
+          - RigidBody: reference/functions/rigidbody.md
+          - DistanceJoint: reference/functions/distancejoint.md
+          - World: reference/functions/world.md
+  - Project:
+      - Known limitations: limitations.md
+      - Roadmap: roadmap.md
+      - Changelog: changelog.md

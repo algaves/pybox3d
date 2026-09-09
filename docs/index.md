@@ -23,8 +23,8 @@ C library providing:
 - `tests/` — pytest suite.
 - `examples/` — runnable demos.
 
-See [Getting started](getting-started.md) to build the extension and run
-the tests, the API reference for `Vec3`, `Quat`, `Box3D`, `RigidBody`,
-`World`, and `DistanceJoint`, [Known limitations](limitations.md) for
-deliberate v1 scope cuts, and [Roadmap](roadmap.md) for what's planned
-next.
+See [Getting started](getting-started/quickstart.md) to build the
+extension and run the tests, the [Reference](reference/classes/vec3.md)
+for `Vec3`, `Quat`, `Box3D`, `RigidBody`, `World`, and `DistanceJoint`,
+[Known limitations](limitations.md) for deliberate v1 scope cuts, and
+[Roadmap](roadmap.md) for what's planned next.
