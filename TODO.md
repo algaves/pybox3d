@@ -1,5 +1,8 @@
 # TODO
 
+Also published as [Roadmap](docs/roadmap.md) in the MkDocs site -- keep
+both in sync when either changes.
+
 Missing elements for the `pybox3d` / `libbox3d` wrapper, tracked against
 the topics a mature 3D physics library's docs cover:
 <https://box2d.org/documentation3d/topics.html>
@@ -36,6 +39,10 @@ yet. See [CHANGELOG.md](CHANGELOG.md) for what's landed so far.
 - [ ] Parallel Joint
 - [ ] Joint cleanup on `World.remove_body` (removing a body currently
       leaves any joint referencing its index dangling/misdirected)
+- [ ] Multiple solver iterations per step for joints (currently one
+      sequential pass, so longer joint chains sag well past
+      `rest_length` -- see `examples/joint_chain_demo.py` and
+      [Known limitations](docs/limitations.md))
 
 ## World / Simulation
 
