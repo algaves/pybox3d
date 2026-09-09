@@ -106,12 +106,6 @@ release-on-GitHub-Release flow via PyPI trusted publishing (no API token
 needed) -- fill in its commented-out `url:` line with the real PyPI
 project URL, and note it still only builds one wheel per run.
 
-## License
-
-LGPL-2.1-or-later -- see [`LICENSE.md`](LICENSE.md).
-
-Copyright (C) 2026 [Algaves](https://github.com/algaves).
-
 ## Layout
 
 - `libbox3d/` -- the pure-C library (zero Python dependency).
@@ -146,3 +140,11 @@ These are deliberate scope cuts for a "basic" first version, not bugs:
   (or raise `ValueError` if the slot is now out of range). `World.get_body`
   always returns a fresh handle object, so `is` comparisons don't
   identify a body across two calls.
+
+
+## License
+
+This project is licensed under the GNU Lesser General Public License v2.1 - see the [LICENSE](LICENSE.md) file for details.
+
+---
+Copyright (C) 2026 [Algaves](https://github.com/algaves).
