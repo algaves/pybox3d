@@ -115,22 +115,40 @@ uv run mkdocs serve    # live-reloading preview at http://127.0.0.1:8000
 
 ## Publishing a release
 
-1. Bump the version in `pyproject.toml`, tag it (e.g. `v2026a0`), and
-   create a GitHub release.
-2. `.github/workflows/python-publish.yml` builds the sdist and all
-   wheels with [`cibuildwheel`](https://cibuildwheel.pypa.io/):
-   Linux (x86_64 + ARM64), Windows (x86_64), and macOS (x86_64 + ARM64)
-   for Python 3.10-3.14, running the test suite against every wheel.
-3. On release, it publishes everything to PyPI via [trusted
-   publishing](https://docs.pypi.org/trusted-publishers/) -- no API
-   token needed.
+`.github/workflows/python-publish.yml` builds the sdist and all wheels
+with [`cibuildwheel`](https://cibuildwheel.pypa.io/): Linux
+(x86_64 + ARM64), Windows (x86_64), and macOS (x86_64 + ARM64) for
+Python 3.10-3.14, running the test suite against every wheel, then
+publishes them to PyPI via [trusted
+publishing](https://docs.pypi.org/trusted-publishers/) -- no API token
+needed. The `pypi-publish` job runs when the workflow is triggered from
+*Actions / Run workflow* (`workflow_dispatch`) or whenever a GitHub
+release is published, and deploys to the `pypi` environment.
 
-For a quick local build on just your platform/Python:
+One-time setup:
+
+1. On PyPI, add a *Trusted Publishers* entry for this repository
+   matching the `python-publish.yml` workflow and the `pypi` environment.
+2. In the repo settings, create a `pypi` GitHub environment.
+
+To publish a new version:
+
+1. Bump the version in `pyproject.toml` and add a `CHANGELOG.md` entry.
+2. Run the `Upload Python Package` workflow (*Actions -> Run workflow*),
+   or tag the commit and create a GitHub release.
+
+### Quick local build (single platform)
 
 ```sh
 uv build     # produces dist/pybox3d-<version>.tar.gz and a wheel
-uv publish   # or: twine upload dist/*
+uv publish   # set UV_PUBLISH_TOKEN with a PyPI API token (or twine upload dist/*)
 ```
+
+Linux caveat: a local `uv build` produces a `linux_x86_64`-tagged wheel,
+which PyPI rejects. Repair it first --
+`uvx --from auditwheel auditwheel repair dist/*.whl -w dist/` -- which
+re-tags it with the compatible `manylinux*` tags. To avoid this
+altogether, publish through the CI workflow above.
 
 ## Layout
 
