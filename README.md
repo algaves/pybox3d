@@ -110,6 +110,8 @@ project URL, and note it still only builds one wheel per run.
 
 LGPL-2.1-or-later -- see [`LICENSE.md`](LICENSE.md).
 
+Copyright (C) 2026 [Algaves](https://github.com/algaves).
+
 ## Layout
 
 - `libbox3d/` -- the pure-C library (zero Python dependency).

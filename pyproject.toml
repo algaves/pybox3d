@@ -1,10 +1,11 @@
 [project]
 name = "pybox3d"
-version = "0.1.0"
+version = "2026a0"
 description = "CPython C-API wrapper around a from-scratch 3D box geometry + rigid-body physics library"
 readme = "README.md"
 authors = [
-    { name = "sealtielfreak", email = "sealtielfreak@yandex.com" }
+    { name = "Algaves" },
+    { name = "Diego-Sealtiel Valderrama Garcia", email = "sealtielfreak@yandex.com" },
 ]
 requires-python = ">=3.10"
 dependencies = []
@@ -12,7 +13,7 @@ license = "LGPL-2.1-or-later"
 license-files = ["LICENSE.md"]
 keywords = ["physics", "3d", "collision", "rigid-body", "box", "cpython-c-api"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 1 - Planning",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
