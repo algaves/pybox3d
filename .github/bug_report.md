@@ -46,3 +46,6 @@ A clear and concise description of what you expected to happen.
 
 ## Additional Context
 Add any other context about the problem here (e.g., virtual environment setup, Docker configuration).
+
+---
+**Template reference:** This report uses the standardized templates in `.github/`. See `template_request.md` for requesting new template types.

@@ -35,3 +35,6 @@ pytest tests/ --cov=src/
 
 ## Alternative Considered
 <!-- Describe any alternative solutions or features you considered -->
+
+---
+**Template reference:** This request uses the standardized templates in `.github/`. See `template_request.md` for requesting new template types.
