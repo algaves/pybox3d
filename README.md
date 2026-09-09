@@ -82,7 +82,10 @@ The library has six public types:
 
 See [`docs/`](docs/) for the full API reference (build it locally with
 `uv run mkdocs serve`, see below) and `examples/falling_box_demo.py` for a
-complete runnable version of the snippet above.
+complete runnable version of the snippet above. `examples/` also has three
+more `DistanceJoint` demos -- `pendulum_joint_demo.py`,
+`joint_chain_demo.py`, and `dumbbell_demo.py` -- see the docs site's
+Examples page for all of them.
 
 ## Development
 
@@ -101,7 +104,7 @@ Full docs (getting started, API reference, examples) are built with
 [MkDocs](https://www.mkdocs.org/):
 
 ```sh
-uv sync --group docs   # install mkdocs + mkdocs-material
+uv sync --group docs   # install mkdocs + mkdocs-nature
 uv run mkdocs serve    # live-reloading preview at http://127.0.0.1:8000
 ```
 
@@ -165,6 +168,12 @@ These are deliberate scope cuts for a "basic" first version, not bugs:
   resolution) no angular/torque contribution. `World.remove_body` also
   doesn't clean up joints referencing the removed/swapped index. See
   [TODO.md](TODO.md) for the planned joint types.
+- **Joints solve once per step, sequentially, no inner iteration loop**
+  (like contact friction, above): fine for a short chain (2-3 links,
+  `examples/joint_chain_demo.py`), but a longer chain settles into a
+  visibly saggy steady state well past its `rest_length` since a
+  per-step correction only propagates to one neighboring joint at a
+  time.
 
 
 ## License

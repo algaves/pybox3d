@@ -20,11 +20,11 @@ uv run python examples/falling_box_demo.py
 ## Working on the docs
 
 Docs live under `docs/` and are built with [MkDocs](https://www.mkdocs.org/)
-+ [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/). The
++ the [Nature theme](https://github.com/pkeilbach/mkdocs-nature). The
 `docs` dependency group installs both:
 
 ```sh
-uv sync --group docs      # install mkdocs + mkdocs-material
+uv sync --group docs      # install mkdocs + mkdocs-nature
 uv run mkdocs serve       # live-reloading local preview at http://127.0.0.1:8000
 uv run mkdocs build       # build the static site into site/
 ```

@@ -9,6 +9,8 @@ C library providing:
 - **`RigidBody`** / **`World`** — basic rigid-body dynamics scoped to
   boxes: mass/inertia, semi-implicit Euler integration, naive O(n²)
   collision detection, and impulse-based resolution.
+- **`DistanceJoint`** — a rigid center-to-center distance constraint for
+  connecting two bodies (pendulums, chains, ...).
 
 ## Layout
 
@@ -22,6 +24,7 @@ C library providing:
 - `examples/` — runnable demos.
 
 See [Getting started](getting-started.md) to build the extension and run
-the tests, the API reference for `Vec3`, `Quat`, `Box3D`, `RigidBody`, and
-`World`, and [Known limitations](limitations.md) for deliberate v1 scope
-cuts.
+the tests, the API reference for `Vec3`, `Quat`, `Box3D`, `RigidBody`,
+`World`, and `DistanceJoint`, [Known limitations](limitations.md) for
+deliberate v1 scope cuts, and [Roadmap](roadmap.md) for what's planned
+next.

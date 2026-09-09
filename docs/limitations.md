@@ -32,3 +32,13 @@ These are deliberate scope cuts for a "basic" first version, not bugs:
   pointing at the wrong body or an out-of-range index. See `TODO.md` for
   the rest of the planned joint types (revolute, prismatic, spherical,
   weld, motor, wheel, ...).
+- **Joints solve once per step, sequentially, with no inner iteration
+  loop** (matching contact resolution's single-pass friction, see above).
+  A correction at one joint only propagates to its immediate neighbor
+  within a given step; for a short chain (2-3 links) this converges close
+  enough to look right over many steps, but longer joint chains settle
+  into a visibly saggy steady state well past their `rest_length` --
+  compare `examples/joint_chain_demo.py`'s 3-link chain (~5-9% error) to
+  what a naive 6-link chain does (the topmost link ends up stretched to
+  ~1.8x its `rest_length`). A real fix needs multiple solver iterations
+  per step (or a proper LCP/direct solve), not just more simulated time.
