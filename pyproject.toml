@@ -1,0 +1,58 @@
+[project]
+name = "pybox3d"
+version = "0.1.0"
+description = "CPython C-API wrapper around a from-scratch 3D box geometry + rigid-body physics library"
+readme = "README.md"
+authors = [
+    { name = "sealtielfreak", email = "sealtielfreak@yandex.com" }
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["scikit-build-core>=0.10"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+minimum-version = "0.10"
+build-dir = "build/{wheel_tag}"
+wheel.packages = ["src/pybox3d"]
+cmake.source-dir = "."
+cmake.build-type = "Release"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "mypy>=1.10",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src/pybox3d", "tests", "examples"]
+
+[[tool.mypy.overrides]]
+module = "pybox3d._pybox3d"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "conftest",
+    "test_import",
+    "test_vec3",
+    "test_box3d",
+    "test_rigidbody",
+    "test_world_step",
+]
+disallow_untyped_defs = false
