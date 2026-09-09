@@ -1,3 +1,7 @@
+---
+icon: material/cube
+---
+
 # pybox3d
 
 A Python wrapper, written directly against the **CPython C API** (no
