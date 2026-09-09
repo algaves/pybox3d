@@ -15,8 +15,8 @@ See [Roadmap](roadmap.md) for what's still missing.
 
 - `DistanceJoint`: a rigid center-to-center distance constraint between
   two bodies already in a `World`, via `World.add_joint()`/`get_joint()`/
-  `remove_joint()`/`joint_count`. See [DistanceJoint](api/joint.md) and
-  the pendulum demo in [Examples](examples.md).
+  `remove_joint()`/`joint_count`. See [DistanceJoint](reference/classes/distancejoint.md) and
+  the pendulum demo in [Examples](examples/index.md).
 - [Roadmap](roadmap.md), tracking missing features against
   <https://box2d.org/documentation3d/topics.html>.
 - This changelog.
@@ -31,7 +31,7 @@ See [Roadmap](roadmap.md) for what's still missing.
 - `examples/joint_chain_demo.py` (a short chain of `DistanceJoint`s
   hanging from a static anchor) and `examples/dumbbell_demo.py` (two
   free dynamic bodies joined by a `DistanceJoint`, no static anchor) --
-  see [Examples](examples.md).
+  see [Examples](examples/index.md).
 - This Roadmap and Changelog, published as pages in the docs site
   (mirroring `TODO.md`/`CHANGELOG.md` at the repo root).
 
@@ -42,6 +42,15 @@ See [Roadmap](roadmap.md) for what's still missing.
   with a light blue palette (after a brief detour to the Nature theme),
   restoring Material's visual style and enhanced search. This reverts
   the earlier Material-to-Nature switch.
+- Documentation site restructured into guided sections: `Getting
+  started` (install / quickstart / documentation workflow), `Tutorials`
+  (step-by-step walkthroughs of the falling box, pendulum, joint chain,
+  and dumbbell demos), `Examples` (one page per runnable demo),
+  `Reference` (module, class, and function sub-pages), and `Project`
+  (limitations / roadmap / changelog). `docs/api/` was replaced by
+  `docs/reference/{modules,classes,functions}/`, with method content
+  split across the new class/function pages and `ContactInfo`/`RayHit`
+  promoted to their own class pages.
 
 ### Fixed
 

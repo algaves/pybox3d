@@ -40,6 +40,15 @@ See [TODO.md](TODO.md) for what's still missing.
   with a light blue palette (after a brief detour to the Nature theme),
   restoring Material's visual style and enhanced search. This reverts
   the earlier Material-to-Nature switch.
+- Documentation site restructured into guided sections: `Getting
+  started` (install / quickstart / documentation workflow), `Tutorials`
+  (step-by-step walkthroughs of the falling box, pendulum, joint chain,
+  and dumbbell demos), `Examples` (one page per runnable demo),
+  `Reference` (module, class, and function sub-pages), and `Project`
+  (limitations / roadmap / changelog). `docs/api/` was replaced by
+  `docs/reference/{modules,classes,functions}/`, with method content
+  split across the new class/function pages and `ContactInfo`/`RayHit`
+  promoted to their own class pages.
 
 ### Fixed
 
