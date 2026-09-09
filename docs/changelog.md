@@ -37,14 +37,17 @@ See [Roadmap](roadmap.md) for what's still missing.
 
 ### Changed
 
-- MkDocs theme switched from Material to
-  [Nature](https://github.com/pkeilbach/mkdocs-nature).
+- MkDocs theme switched to
+  [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
+  with a light blue palette (after a brief detour to the Nature theme),
+  restoring Material's visual style and enhanced search. This reverts
+  the earlier Material-to-Nature switch.
 
 ### Fixed
 
-- `docs/getting-started.md` and `README.md` still referenced the old
-  Material theme/`mkdocs-material` package after the switch above;
-  updated both to `mkdocs-nature`.
+- `docs/getting-started.md` and `README.md` still referenced the
+  Nature theme/`mkdocs-nature` package after the switch back above;
+  updated both to `mkdocs-material`.
 - [`index.md`](index.md) never mentioned `DistanceJoint` after it was
   added.
 - Task-list checkboxes (`- [x]`/`- [ ]`) on this page and
