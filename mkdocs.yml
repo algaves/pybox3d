@@ -12,6 +12,8 @@ markdown_extensions:
   - codehilite
   - toc
   - tables
+  - pymdownx.tasklist:
+      custom_checkbox: true
 
 nav:
   - Home: index.md
@@ -25,3 +27,5 @@ nav:
       - DistanceJoint: api/joint.md
   - Examples: examples.md
   - Known limitations: limitations.md
+  - Roadmap: roadmap.md
+  - Changelog: changelog.md
