@@ -15,6 +15,19 @@ class DistanceJoint:
     def body_b(self) -> RigidBody: ...
 ```
 
+## Attributes
+
+| Attribute | Type | Description |
+|---|---|---|
+| `rest_length` | `float` | The target distance (default: distance between the bodies at creation). |
+
+## Properties
+
+| Property | Type | Description |
+|---|---|---|
+| `body_a` | `RigidBody` | World-backed handle for the first body. |
+| `body_b` | `RigidBody` | World-backed handle for the second body. |
+
 `DistanceJoint` cannot be constructed directly -- it only exists bound to
 two specific bodies inside a `World`, created via `World.add_joint()`.
 Like [`RigidBody`](rigidbody.md) handles from `World.add_body()`/
@@ -27,7 +40,7 @@ state inside the `World`.
 Anchored at body centers only -- there's no per-body local anchor offset
 (e.g. attaching to a corner rather than the center), and like contact
 resolution, the joint impulse is linear-only with no angular/torque
-contribution. See [Known limitations](../limitations.md).
+contribution. See [Known limitations](../../limitations.md).
 
 ## Example
 
