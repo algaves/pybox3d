@@ -80,5 +80,6 @@ module = [
     "test_box3d",
     "test_rigidbody",
     "test_world_step",
+    "test_joint",
 ]
 disallow_untyped_defs = false
