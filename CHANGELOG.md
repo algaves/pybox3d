@@ -35,6 +35,17 @@ See [TODO.md](TODO.md) for what's still missing.
 
 ### Changed
 
+- Release workflow (`.github/workflows/python-publish.yml`) now builds a
+  full wheel matrix with `cibuildwheel` -- Windows (x86_64), Linux
+  (x86_64 + ARM64 via QEMU, `manylinux`), and macOS (x86_64 + ARM64) for
+  Python 3.10-3.14 -- runs the test suite against every wheel, and
+  publishes to PyPI with trusted publishing. The sdist is built
+  separately and trimmed to sources only (no `docs/`, `tests/`,
+  `examples/`, `.github/`, or `uv.lock`).
+- CI split into `tests.yaml` (cross-platform pytest matrix on every
+  push/PR) and `check.yaml` (ruff lint + mypy typecheck) workflows.
+- Installation docs/README now advertise the prebuilt wheels; source
+  installs remain documented as the fallback for unsupported platforms.
 - MkDocs theme switched to
   [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
   with a light blue palette (after a brief detour to the Nature theme),
