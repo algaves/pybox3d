@@ -3,6 +3,9 @@ site_description: A CPython C-API wrapper around a from-scratch 3D box geometry 
 repo_url: https://github.com/algaves/pybox3d
 theme:
   name: material
+  icon:
+    logo: material/cube
+  favicon: images/favicon.svg
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -40,7 +43,7 @@ markdown_extensions:
       custom_checkbox: true
 
 nav:
-  - Home: {icon: material/cube} index.md
+  - Home: index.md
   - Getting started:
       - Installation: getting-started/install.md
       - Quickstart: getting-started/quickstart.md
