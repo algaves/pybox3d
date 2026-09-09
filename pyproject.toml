@@ -8,6 +8,26 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = []
+license = "LGPL-2.1-or-later"
+license-files = ["LICENSE.md"]
+keywords = ["physics", "3d", "collision", "rigid-body", "box", "cpython-c-api"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: C",
+    "Topic :: Games/Entertainment :: Simulation",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/algaves/pybox3d"
+Repository = "https://github.com/algaves/pybox3d"
+Issues = "https://github.com/algaves/pybox3d/issues"
 
 [build-system]
 requires = ["scikit-build-core>=0.10"]
@@ -17,6 +37,7 @@ build-backend = "scikit_build_core.build"
 minimum-version = "0.10"
 build-dir = "build/{wheel_tag}"
 wheel.packages = ["src/pybox3d"]
+wheel.exclude = ["pybox3d/_ext/*.c", "pybox3d/_ext/*.h"]
 cmake.source-dir = "."
 cmake.build-type = "Release"
 
