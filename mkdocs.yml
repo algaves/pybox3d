@@ -2,31 +2,15 @@ site_name: pybox3d
 site_description: A CPython C-API wrapper around a from-scratch 3D box geometry + rigid-body physics library
 repo_url: https://github.com/algaves/pybox3d
 theme:
-  name: material
-  palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: indigo
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
-  features:
-    - navigation.sections
-    - content.code.copy
+  name: nature
 
 plugins:
   - search
 
 markdown_extensions:
   - admonition
-  - pymdownx.superfences
-  - pymdownx.highlight
+  - codehilite
+  - toc
   - tables
 
 nav:
