@@ -69,6 +69,12 @@ See [Roadmap](roadmap.md) for what's still missing.
 - `docs/getting-started.md` and `README.md` still referenced the
   Nature theme/`mkdocs-nature` package after the switch back above;
   updated both to `mkdocs-material`.
+- The PyPI publish workflow ignores platform-tag problems: the
+  `pypi-publish` job runs on `workflow_dispatch` as well as on release
+  (both via trusted publishing on the `pypi` environment), and the README
+  documents that locally-built Linux wheels carry an unsupported
+  `linux_x86_64` tag which PyPI rejects -- repair them with
+  `auditwheel repair` or publish through the CI workflow.
 - [`index.md`](index.md) never mentioned `DistanceJoint` after it was
   added.
 - Task-list checkboxes (`- [x]`/`- [ ]`) on this page and
