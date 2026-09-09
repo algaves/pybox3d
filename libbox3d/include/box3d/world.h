@@ -4,6 +4,7 @@
 #include "box3d_export.h"
 #include "box3d/vec3.h"
 #include "box3d/rigidbody.h"
+#include "box3d/joint.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,6 +29,10 @@ typedef struct {
     b3_RigidBody *bodies; /* world-owned heap array, grows via realloc */
     int body_count;
     int body_capacity;
+
+    b3_DistanceJoint *joints; /* world-owned heap array, grows via realloc */
+    int joint_count;
+    int joint_capacity;
 
     /* v1 simplification: collision resolution uses these two *global*
      * material values for every contact rather than per-body mixing
@@ -57,10 +62,27 @@ B3_API b3_RigidBody *b3_world_get_body(b3_World *world, int index);
  * Any index for the previously-last body now refers to a different one. */
 B3_API b3_Status b3_world_remove_body(b3_World *world, int index);
 
+/* Adds a rigid distance joint between world->bodies[body_a_index] and
+ * world->bodies[body_b_index], writing its index to `out_index` (may be
+ * NULL). Returns B3_ERR_INDEX_OUT_OF_RANGE if either body index is out of
+ * range, or B3_ERR_INVALID_ARGUMENT if body_a_index == body_b_index. Same
+ * realloc/index-stability caveats as b3_world_add_body apply. */
+B3_API b3_Status b3_world_add_joint(
+    b3_World *world, int body_a_index, int body_b_index, b3_real rest_length, int *out_index
+);
+
+/* Returns NULL if `index` is out of range. The returned pointer is only
+ * valid until the next add/remove joint call on this world. */
+B3_API b3_DistanceJoint *b3_world_get_joint(b3_World *world, int index);
+
+/* Swap-remove, mirroring b3_world_remove_body. */
+B3_API b3_Status b3_world_remove_joint(b3_World *world, int index);
+
 /* One simulation step: integrate all dynamic bodies (semi-implicit
- * Euler), then run a naive O(n^2) broad+narrow phase (b3_box3d_overlap)
- * over every body pair and resolve any contacts with an impulse-based
- * response plus positional correction. */
+ * Euler), solve every distance joint (bilateral velocity constraint plus
+ * positional correction), then run a naive O(n^2) broad+narrow phase
+ * (b3_box3d_overlap) over every body pair and resolve any contacts with an
+ * impulse-based response plus positional correction. */
 B3_API void b3_world_step(b3_World *world, b3_real dt);
 
 #ifdef __cplusplus

@@ -15,10 +15,18 @@ b3_Status b3_world_init(b3_World *world, b3_Vec3 gravity, int initial_capacity) 
     if (world->bodies == NULL) {
         return B3_ERR_OUT_OF_MEMORY;
     }
+    world->joints = (b3_DistanceJoint *)malloc((size_t)initial_capacity * sizeof(b3_DistanceJoint));
+    if (world->joints == NULL) {
+        free(world->bodies);
+        world->bodies = NULL;
+        return B3_ERR_OUT_OF_MEMORY;
+    }
 
     world->gravity = gravity;
     world->body_count = 0;
     world->body_capacity = initial_capacity;
+    world->joint_count = 0;
+    world->joint_capacity = initial_capacity;
     world->default_restitution = 0.3f;
     world->default_friction = 0.5f;
     return B3_OK;
@@ -29,6 +37,10 @@ void b3_world_destroy(b3_World *world) {
     world->bodies = NULL;
     world->body_count = 0;
     world->body_capacity = 0;
+    free(world->joints);
+    world->joints = NULL;
+    world->joint_count = 0;
+    world->joint_capacity = 0;
 }
 
 b3_Status b3_world_add_body(b3_World *world, const b3_RigidBody *body, int *out_index) {
@@ -73,6 +85,94 @@ b3_Status b3_world_remove_body(b3_World *world, int index) {
     }
     world->body_count -= 1;
     return B3_OK;
+}
+
+b3_Status b3_world_add_joint(
+    b3_World *world, int body_a_index, int body_b_index, b3_real rest_length, int *out_index
+) {
+    if (body_a_index < 0 || body_a_index >= world->body_count ||
+        body_b_index < 0 || body_b_index >= world->body_count) {
+        return B3_ERR_INDEX_OUT_OF_RANGE;
+    }
+    if (body_a_index == body_b_index) {
+        return B3_ERR_INVALID_ARGUMENT;
+    }
+
+    if (world->joint_count == world->joint_capacity) {
+        int new_capacity = world->joint_capacity > 0 ? world->joint_capacity * 2 : 4;
+        b3_DistanceJoint *grown = (b3_DistanceJoint *)realloc(
+            world->joints, (size_t)new_capacity * sizeof(b3_DistanceJoint)
+        );
+        if (grown == NULL) {
+            return B3_ERR_OUT_OF_MEMORY;
+        }
+        world->joints = grown;
+        world->joint_capacity = new_capacity;
+    }
+
+    world->joints[world->joint_count].body_a_index = body_a_index;
+    world->joints[world->joint_count].body_b_index = body_b_index;
+    world->joints[world->joint_count].rest_length = rest_length;
+    if (out_index != NULL) {
+        *out_index = world->joint_count;
+    }
+    world->joint_count += 1;
+    return B3_OK;
+}
+
+b3_DistanceJoint *b3_world_get_joint(b3_World *world, int index) {
+    if (index < 0 || index >= world->joint_count) {
+        return NULL;
+    }
+    return &world->joints[index];
+}
+
+b3_Status b3_world_remove_joint(b3_World *world, int index) {
+    if (index < 0 || index >= world->joint_count) {
+        return B3_ERR_INDEX_OUT_OF_RANGE;
+    }
+    int last = world->joint_count - 1;
+    if (index != last) {
+        world->joints[index] = world->joints[last];
+    }
+    world->joint_count -= 1;
+    return B3_OK;
+}
+
+static void resolve_distance_joint(b3_RigidBody *a, b3_RigidBody *b, b3_real rest_length) {
+    b3_real inv_mass_sum = a->inv_mass + b->inv_mass;
+    if (inv_mass_sum <= 0.0f) {
+        return; /* both static (or massless): nothing to resolve */
+    }
+
+    b3_Vec3 delta = b3_vec3_sub(b->position, a->position);
+    b3_real dist = b3_vec3_length(delta);
+    if (dist < 1e-6f) {
+        return; /* degenerate: coincident centers, no well-defined axis */
+    }
+    b3_Vec3 dir = b3_vec3_scale(delta, 1.0f / dist);
+
+    /* Positional correction toward rest_length -- bilateral (pulls together
+     * or pushes apart depending on the sign of the error), unlike
+     * resolve_contact's one-directional push-apart. Gentler `percent` than
+     * contacts to avoid a stiff rod oscillating/jittering. */
+    const b3_real percent = 0.2f;
+    b3_real error = dist - rest_length;
+    b3_Vec3 correction = b3_vec3_scale(dir, error / inv_mass_sum * percent);
+    a->position = b3_vec3_add(a->position, b3_vec3_scale(correction, a->inv_mass));
+    b->position = b3_vec3_sub(b->position, b3_vec3_scale(correction, b->inv_mass));
+    b3_rigidbody_sync_shape(a);
+    b3_rigidbody_sync_shape(b);
+
+    /* Rigid bilateral velocity constraint: cancel relative velocity along
+     * the joint axis entirely (a stiff rod, not a spring). Linear-only, no
+     * angular contribution -- see README limitations. */
+    b3_Vec3 rel_vel = b3_vec3_sub(b->linear_velocity, a->linear_velocity);
+    b3_real vel_along_dir = b3_vec3_dot(rel_vel, dir);
+    b3_real j = -vel_along_dir / inv_mass_sum;
+    b3_Vec3 impulse = b3_vec3_scale(dir, j);
+    a->linear_velocity = b3_vec3_sub(a->linear_velocity, b3_vec3_scale(impulse, a->inv_mass));
+    b->linear_velocity = b3_vec3_add(b->linear_velocity, b3_vec3_scale(impulse, b->inv_mass));
 }
 
 static void resolve_contact(
@@ -133,6 +233,14 @@ static void resolve_contact(
 void b3_world_step(b3_World *world, b3_real dt) {
     for (int i = 0; i < world->body_count; i++) {
         b3_rigidbody_integrate(&world->bodies[i], world->gravity, dt);
+    }
+
+    for (int i = 0; i < world->joint_count; i++) {
+        b3_DistanceJoint *joint = &world->joints[i];
+        resolve_distance_joint(
+            &world->bodies[joint->body_a_index], &world->bodies[joint->body_b_index],
+            joint->rest_length
+        );
     }
 
     /* Naive O(n^2) broad+narrow phase, adequate for the small body counts
