@@ -25,18 +25,23 @@ C library providing:
 ## Requirements
 
 - Python 3.10+
-- A C compiler and CMake (needed at install time, since `pybox3d` ships
-  no prebuilt wheels yet -- pip/uv compile the extension for you via the
-  `scikit-build-core` build backend)
+- For source installs: a C compiler and CMake (needed at install time --
+  pip/uv compile the extension for you via the `scikit-build-core` build
+  backend)
+
+Prebuilt wheels are published for Python 3.10-3.14 on Windows (x86_64),
+Linux (x86_64 and ARM64), and macOS (x86_64 and ARM64) -- those need no
+C toolchain.
 
 ## Installation
 
 ```sh
-pip install .                                          # from a local checkout
-pip install git+https://github.com/algaves/pybox3d.git # straight from GitHub
+pip install pybox3d                                        # prebuilt wheel
+pip install .                                              # from a local checkout
+pip install git+https://github.com/algaves/pybox3d.git     # straight from GitHub
 ```
 
-Both build `libbox3d` and the `pybox3d._pybox3d` C extension from source
+Source installs build `libbox3d` and the `pybox3d._pybox3d` C extension
 as part of the install -- there's nothing else to run afterwards.
 
 ## Usage
@@ -110,20 +115,22 @@ uv run mkdocs serve    # live-reloading preview at http://127.0.0.1:8000
 
 ## Publishing a release
 
-```sh
-uv build              # produces dist/pybox3d-<version>.tar.gz and a wheel
-uv publish            # or: twine upload dist/*
-```
+1. Bump the version in `pyproject.toml`, tag it (e.g. `v2026a0`), and
+   create a GitHub release.
+2. `.github/workflows/python-publish.yml` builds the sdist and all
+   wheels with [`cibuildwheel`](https://cibuildwheel.pypa.io/):
+   Linux (x86_64 + ARM64), Windows (x86_64), and macOS (x86_64 + ARM64)
+   for Python 3.10-3.14, running the test suite against every wheel.
+3. On release, it publishes everything to PyPI via [trusted
+   publishing](https://docs.pypi.org/trusted-publishers/) -- no API
+   token needed.
 
-`uv build` only produces a wheel for the platform/Python you run it on
-(e.g. `cp311-cp311-linux_x86_64`), since `pybox3d` is a compiled C
-extension. A real PyPI release covering multiple platforms/Python
-versions would need to build one wheel per target -- typically via
-[`cibuildwheel`](https://cibuildwheel.pypa.io/) in CI.
-`.github/workflows/python-publish.yml` already wires up a single-wheel
-release-on-GitHub-Release flow via PyPI trusted publishing (no API token
-needed) -- fill in its commented-out `url:` line with the real PyPI
-project URL, and note it still only builds one wheel per run.
+For a quick local build on just your platform/Python:
+
+```sh
+uv build     # produces dist/pybox3d-<version>.tar.gz and a wheel
+uv publish   # or: twine upload dist/*
+```
 
 ## Layout
 
