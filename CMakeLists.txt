@@ -19,6 +19,7 @@ Python_add_library(_pybox3d MODULE WITH_SOABI
     src/pybox3d/_ext/py_quat.c
     src/pybox3d/_ext/py_box3d.c
     src/pybox3d/_ext/py_rigidbody.c
+    src/pybox3d/_ext/py_joint.c
     src/pybox3d/_ext/py_world.c
 )
 

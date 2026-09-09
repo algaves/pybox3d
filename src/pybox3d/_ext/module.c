@@ -6,6 +6,7 @@
 #include "py_quat.h"
 #include "py_box3d.h"
 #include "py_rigidbody.h"
+#include "py_joint.h"
 #include "py_world.h"
 
 #define PYBOX3D_VERSION "0.1.0"
@@ -33,6 +34,7 @@ PyMODINIT_FUNC PyInit__pybox3d(void) {
     if (add_type(module, &PyVec3_Type, "Vec3") < 0) goto fail;
     if (add_type(module, &PyQuat_Type, "Quat") < 0) goto fail;
     if (add_type(module, &PyRigidBody_Type, "RigidBody") < 0) goto fail;
+    if (add_type(module, &PyDistanceJoint_Type, "DistanceJoint") < 0) goto fail;
     if (add_type(module, &PyWorld_Type, "World") < 0) goto fail;
 
     /* Box3D + ContactInfo/RayHit struct-sequence types + BOX_KIND_* constants. */
