@@ -1,44 +1,32 @@
-## Pull Request Template
-
-### Description
+## Description
 <!-- Provide a brief summary of the changes and the rationale behind them. -->
 
-### Type of Change
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] ♻️ Refactoring / Performance improvement
-- [ ] 📝 Documentation update (Docstrings, README, MkDocs)
-- [ ] 🛠️ C-extension build improvement
-- [ ] 🎨 MkDocs theme/configuration update
+## Related Issues
+<!-- Link to the issue(s) this PR fixes or relates to (e.g., Closes #123). -->
 
-### Checklist
-- [ ] **Code follows project style** (black, ruff formatting)
-- [ ] **Linting passes** (ruff check / pylint)
-- [ ] **Type checking passes** (mypy, if applicable)
-- [ ] **CMake/build compiles** without errors/warnings
-- [ ] **Tests pass** (`pytest tests/`)
-- [ ] **Documentation updated** (if applicable)
-- [ ] **Changelog updated** (if applicable)
+## Type of Change
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Refactoring / Performance improvement
+- [ ] Documentation update (docstrings, README, MkDocs)
+- [ ] C-extension build / packaging improvement
 
-### Testing
-<!-- Describe the tests you ran to verify your changes. Provide instructions so we can reproduce. -->
+## Checklist
+- [ ] Linting passes: `uv run ruff check .`
+- [ ] Type checking passes: `uv run mypy`
+- [ ] Tests pass: `uv run pytest`
+- [ ] Docs build cleanly: `uv run mkdocs build --strict`
+- [ ] Changelog updated (if applicable)
+
+## Testing
+Describe the tests you ran to verify your changes, and how to reproduce them:
 
 ```bash
-# Run the test suite
-pytest tests/
-
-# Run type checking
-mypy src/
-
-# Run linting
-ruff check src/
+uv run pytest
+uv run ruff check .
+uv run mypy
+uv run mkdocs build --strict
 ```
 
-### Additional Context
-<!-- Describe any alternative solutions or features you considered -->
-
-### Related Issues
-<!-- Link to issue(s) this PR fixes or relates to (e.g., Closes #123) -->
-
-### C-extension Notes (if applicable)
-<!-- Any special notes about CMake, cibuildwheel, or native module changes -->
+## Additional Context
+<!-- Describe any alternative solutions or design decisions. -->

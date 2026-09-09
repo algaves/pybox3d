@@ -1,6 +1,6 @@
 ## Template Request
 
-### Requested Template
+## Requested Template
 - [ ] Bug Report
 - [ ] Feature Request
 - [ ] Documentation Update
@@ -8,20 +8,17 @@
 - [ ] New Integration/Module
 - [ ] Other: ____________________
 
-### Reason for Request
-<!-- Describe why this template is needed and what information should be captured -->
+## Reason for Request
+<!-- Describe why this template is needed and what information it should capture. -->
 
-### Template Content
-<!-- Provide the proposed template content or link to a reference template -->
+## Template Content
+<!-- Provide the proposed template content or link to a reference template. -->
 
-### Related Issues
-<!-- Link to issue(s) requesting this template (e.g., Closes #123) -->
+## Related Issues
+<!-- Link to the issue(s) requesting this template (e.g., Closes #123). -->
 
-### Priority
+## Priority
 - [ ] Low
 - [ ] Medium
 - [ ] High
 - [ ] Blocking
-
-### Assignee
-<!-- @username or leave empty for triage -->

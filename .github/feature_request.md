@@ -1,40 +1,32 @@
-## Description
-<!-- Provide a brief summary of the Python changes and the rationale behind them. -->
+---
+name: Feature Request
+about: Suggest a new feature or improvement for pybox3d.
+title: '[FEATURE] '
+labels: enhancement
+---
 
-## Related Issues
-<!-- Link to the issue(s) this PR fixes (e.g., Closes #123). -->
+## Problem / Use Case
+Describe the problem you are trying to solve, or the use case this feature would address.
 
-## Type of Change
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ♻️ Refactoring / Performance improvement
-- [ ] 📝 Documentation update (Docstrings, README, MkDocs)
-- [ ] 🛠️ C-extension build improvement
+## Proposed Solution
+A clear and concise description of the feature or API you would like to see.
 
-## Python Quality Checklist
-- [ ] **Formatting:** Code has been formatted using `black`, `ruff`, or `yapf`.
-- [ ] **Linting:** Code passes `flake8`, `pylint`, or `ruff check` without errors.
-- [ ] **Type Hints:** Type checking passes using `mypy` (if applicable).
-- [ ] **Dependencies:** Any new packages have been added to `pyproject.toml`.
-- [ ] **CMake Build:** Native extension compiles without warnings.
+## Proposed API (if applicable)
+Sketch the expected public API and behavior:
 
-## Testing Environment
-- [ ] **Unit Tests:** Run locally via `pytest tests/`
-- [ ] **Test Coverage:** Code coverage has met the project threshold.
-- [ ] **C-extension Tests:** Native module tests pass (if applicable).
+```python
+import pybox3d
 
-### Test Command Used:
-```bash
-pytest tests/ --cov=src/
+# Example of the proposed usage
 ```
 
-## Impact Assessment
-- **API Changes:** [breaking / non-breaking]
-- **Performance:** [expected impact]
-- **Dependencies:** [new packages or version bumps]
+## Alternatives Considered
+Describe any alternative solutions or workarounds you have considered.
 
-## Alternative Considered
-<!-- Describe any alternative solutions or features you considered -->
+## Impact
+- **New API:** [e.g., new class/method, no breaking change]
+- **Existing API:** [e.g., none, deprecation, breaking change]
+- **Performance:** [e.g., expected impact, if any]
 
----
-**Template reference:** This request uses the standardized templates in `.github/`. See `template_request.md` for requesting new template types.
+## Additional Context
+Add any other context (related issues, references, examples from other physics libraries).
