@@ -1,5 +1,14 @@
 # pybox3d
 
+![GitHub Last Commit](https://img.shields.io/github/last-commit/algaves/pybox3d.svg?style=flat-square)
+![Python - Version](https://img.shields.io/badge/python-%3E%3D3.10-brightgreen?style=flat-square)
+![PyPI - Version](https://img.shields.io/pypi/v/pybox3d?style=flat-square)
+![Python - Implementation](https://img.shields.io/pypi/implementation/pybox3d?style=flat-square)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/pybox3d?style=flat-square)
+![Docs](https://img.shields.io/badge/docs-mkdocs-blue?style=flat-square)
+![License](https://img.shields.io/badge/license-LGPL--2.1-green?style=flat-square)
+
+
 A Python wrapper, written directly against the **CPython C API** (no
 ctypes/cffi/pybind11/nanobind), around `libbox3d` -- a small, from-scratch
 C library providing:
