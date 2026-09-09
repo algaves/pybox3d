@@ -23,11 +23,24 @@ class RigidBody:
     def __init__(self, position: VecLike, half_extents: VecLike, mass: float = 0.0) -> None: ...
 ```
 
+## Attributes
+
+| Attribute | Type | Description |
+|---|---|---|
+| `position` | `Vec3` | World-space center of the body. |
+| `orientation` | `Quat` | Current rotation. |
+| `linear_velocity` | `Vec3` | Current velocity (m/s). |
+| `angular_velocity` | `Vec3` | Current angular velocity (rad/s). |
+| `mass` | `float` | Mass in kg; `0` marks the body static. |
+| `restitution` | `float` | Bounciness (v1: not used in contact resolution — see below). |
+| `friction` | `float` | Surface friction (v1: not used in contact resolution — see below). |
+| `is_static` | `bool` | `True` when `mass == 0`. |
+
 - `inv_mass` is `0.0` for static bodies (`mass == 0`), otherwise `1 / mass`.
 - `shape` is the body's `Box3D`, kept in sync with `position`/`orientation`.
 - `restitution`/`friction` are carried per-body for forward compatibility,
   but v1's `World.step` doesn't consult them — see
-  [Known limitations](../limitations.md).
+  [Known limitations](../../limitations.md).
 
 ## World-backed handles
 
@@ -38,14 +51,6 @@ the body's live state inside the `World`. `World.get_body(index)` returns
 a fresh handle object each call — `is` comparisons don't identify the same
 body across two calls, only equal underlying state does.
 
-## Methods
-
-| Method | Returns | Description |
-|---|---|---|
-| `apply_force(force, point=None)` | `None` | Accumulate a force; `point` defaults to the body's position (i.e. no torque). |
-| `apply_impulse(impulse, point=None)` | `None` | Accumulate an impulse (applied on the next `World.step`). |
-| `clear_accumulators()` | `None` | Reset accumulated force/impulse to zero. |
-
 ## Example
 
 ```python
@@ -54,3 +59,9 @@ from pybox3d import RigidBody, Vec3
 box = RigidBody(Vec3(0, 5, 0), Vec3(0.5, 0.5, 0.5), mass=1.0)
 box.apply_impulse(Vec3(0, 0, 2))
 ```
+
+## Methods
+
+See the [RigidBody functions](../functions/rigidbody.md) page for the
+full method reference (`apply_force`, `apply_impulse`,
+`clear_accumulators`).

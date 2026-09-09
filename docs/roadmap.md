@@ -1,15 +1,15 @@
-# TODO
+# Roadmap
 
-Also published as [Roadmap](docs/roadmap.md) in the MkDocs site -- keep
-both in sync when either changes.
+Mirrors [`TODO.md`](https://github.com/algaves/pybox3d/blob/main/TODO.md)
+at the repo root -- keep both in sync when either changes.
 
 Missing elements for the `pybox3d` / `libbox3d` wrapper, tracked against
 the topics a mature 3D physics library's docs cover:
 <https://box2d.org/documentation3d/topics.html>
 
 Checked items are implemented (possibly in a reduced "v1" form -- see
-[Known limitations](docs/limitations.md)); unchecked items don't exist
-yet. See [CHANGELOG.md](CHANGELOG.md) for what's landed so far.
+[Known limitations](limitations.md)); unchecked items don't exist yet.
+See [Changelog](changelog.md) for what's landed so far.
 
 ## Shapes
 
@@ -42,7 +42,7 @@ yet. See [CHANGELOG.md](CHANGELOG.md) for what's landed so far.
 - [ ] Multiple solver iterations per step for joints (currently one
       sequential pass, so longer joint chains sag well past
       `rest_length` -- see `examples/joint_chain_demo.py` and
-      [Known limitations](docs/limitations.md))
+      [Known limitations](limitations.md))
 
 ## World / Simulation
 
