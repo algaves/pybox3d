@@ -3,7 +3,8 @@
 `World(gravity=(0, -9.81, 0), initial_capacity=8)`
 
 A rigid-body simulation world: naive O(n²) box-box collision detection
-and simple impulse-based resolution.
+and simple impulse-based resolution, plus rigid distance joints (see
+[DistanceJoint](joint.md)).
 
 ```python
 class World:
@@ -13,6 +14,8 @@ class World:
 
     @property
     def body_count(self) -> int: ...
+    @property
+    def joint_count(self) -> int: ...
 
     def __init__(self, gravity: VecLike = ..., initial_capacity: int = 8) -> None: ...
 ```
@@ -28,17 +31,25 @@ contact rather than per-body mixing rules — see
 | `add_body(body)` | `RigidBody` | Deep-copies `body` in; returns a new world-backed handle. |
 | `get_body(index)` | `RigidBody` | A fresh world-backed handle for the body at `index`. |
 | `remove_body(index)` | `None` | Swap-remove; see [RigidBody](rigidbody.md) on stale handles. |
+| `add_joint(body_a, body_b, rest_length=None)` | `DistanceJoint` | Connects two bodies already in this world; `rest_length` defaults to their current distance apart. |
+| `get_joint(index)` | `DistanceJoint` | A fresh world-backed handle for the joint at `index`. |
+| `remove_joint(index)` | `None` | Swap-remove; see [DistanceJoint](joint.md) on stale handles. |
 | `step(dt)` | `None` | Advance the simulation by `dt` seconds. |
 
-`add_body` can raise `CapacityError` (a `Box3DError`) if the world's
-fixed-capacity body storage is full.
+`add_body`/`add_joint` can raise `CapacityError` (a `Box3DError`) if the
+world's fixed-capacity storage is full. `add_joint` raises `ValueError` if
+`body_a`/`body_b` aren't already world-backed handles belonging to this
+same `World`.
 
-### On `remove_body`
+### On `remove_body`/`remove_joint`
 
-Removing a body swap-removes it: the last body in storage moves into the
-freed slot. Any `RigidBody` handle still holding the old index for that
-displaced body will silently resolve to a different body (or raise
-`ValueError` if the slot is now out of range).
+Both swap-remove: the last item in storage moves into the freed slot. Any
+handle still holding the old index for that displaced item will silently
+resolve to a different body/joint (or raise `ValueError` if the slot is
+now out of range). Removing a body does not remove joints that reference
+it -- a joint whose body index now points past `body_count`, or at an
+unrelated swapped-in body, is a known v1 gap (see
+[Known limitations](../limitations.md)).
 
 ## Example
 

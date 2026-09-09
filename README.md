@@ -18,6 +18,9 @@ C library providing:
 - **`RigidBody`** / **`World`**: basic rigid-body dynamics scoped to
   boxes -- mass/inertia, semi-implicit Euler integration, naive O(n²)
   collision detection, and impulse-based resolution.
+- **`DistanceJoint`**: a rigid center-to-center distance constraint for
+  connecting two bodies (e.g. a pendulum, a chain link). See
+  [TODO.md](TODO.md) for the other joint types planned.
 
 ## Requirements
 
@@ -55,7 +58,7 @@ for _ in range(300):  # 5 seconds at 60Hz
 print(handle.position.y)  # settles near 0.5, resting on the ground
 ```
 
-The library has five public types:
+The library has six public types:
 
 - **`Vec3`** / **`Quat`** -- a 3D vector and rotation quaternion, with the
   usual arithmetic (`+`, `-`, `*`, dot/cross product, normalization,
@@ -72,6 +75,10 @@ The library has five public types:
 - **`World`** -- owns a set of bodies and steps the simulation
   (`step(dt)`), with naive O(n²) collision detection and impulse-based
   resolution.
+- **`DistanceJoint`** -- connects two bodies already in a `World` via
+  `World.add_joint(body_a, body_b, rest_length=None)`, holding the
+  distance between their centers at `rest_length` (defaults to their
+  current distance apart).
 
 See [`docs/`](docs/) for the full API reference (build it locally with
 `uv run mkdocs serve`, see below) and `examples/falling_box_demo.py` for a
@@ -126,6 +133,9 @@ project URL, and note it still only builds one wheel per run.
 - `tests/` -- pytest suite.
 - `examples/` -- runnable demos.
 - `docs/` -- MkDocs source for the full documentation site.
+- [`TODO.md`](TODO.md) -- missing features, tracked against a mature 3D
+  physics library's docs.
+- [`CHANGELOG.md`](CHANGELOG.md) -- notable changes.
 
 ## Known v1 limitations
 
@@ -149,6 +159,12 @@ These are deliberate scope cuts for a "basic" first version, not bugs:
   (or raise `ValueError` if the slot is now out of range). `World.get_body`
   always returns a fresh handle object, so `is` comparisons don't
   identify a body across two calls.
+- **`DistanceJoint` only, anchored at body centers**: the only joint type
+  in v1 is a rigid center-to-center distance constraint -- no per-body
+  local anchor offset, no spring softness/limits, and (like contact
+  resolution) no angular/torque contribution. `World.remove_body` also
+  doesn't clean up joints referencing the removed/swapped index. See
+  [TODO.md](TODO.md) for the planned joint types.
 
 
 ## License

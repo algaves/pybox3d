@@ -38,5 +38,6 @@ nav:
       - Box3D: api/box3d.md
       - RigidBody: api/rigidbody.md
       - World: api/world.md
+      - DistanceJoint: api/joint.md
   - Examples: examples.md
   - Known limitations: limitations.md

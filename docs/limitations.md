@@ -23,3 +23,12 @@ These are deliberate scope cuts for a "basic" first version, not bugs:
   (or raise `ValueError` if the slot is now out of range).
   [`World.get_body`](api/world.md) always returns a fresh handle object,
   so `is` comparisons don't identify a body across two calls.
+- **[`DistanceJoint`](api/joint.md) only, anchored at body centers**: the
+  only joint type in v1 is a rigid center-to-center distance constraint --
+  no per-body local anchor offset, no spring softness/limits, and (like
+  contact resolution) no angular/torque contribution. `World.remove_body`
+  also doesn't clean up joints that reference the removed (or swapped)
+  index, so removing a body that has joints attached can leave a joint
+  pointing at the wrong body or an out-of-range index. See `TODO.md` for
+  the rest of the planned joint types (revolute, prismatic, spherical,
+  weld, motor, wheel, ...).
