@@ -37,6 +37,8 @@ See [Roadmap](roadmap.md) for what's still missing.
 
 ### Changed
 
+- Version bumped to `2026a1` for the first PyPI release (tagged
+  `v2026a1`).
 - Release workflow (`.github/workflows/python-publish.yml`) now builds a
   full wheel matrix with `cibuildwheel` -- Windows (x86_64), Linux
   (x86_64 + ARM64 via QEMU, `manylinux`), and macOS (x86_64 + ARM64) for
