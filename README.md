@@ -115,7 +115,7 @@ uv run mkdocs serve    # live-reloading preview at http://127.0.0.1:8000
 
 ## Publishing a release
 
-`.github/workflows/python-publish.yml` builds the sdist and all wheels
+`.github/workflows/publish.yml` builds the sdist and all wheels
 with [`cibuildwheel`](https://cibuildwheel.pypa.io/): Linux
 (x86_64 + ARM64), Windows (x86_64), and macOS (x86_64 + ARM64) for
 Python 3.10-3.14, running the test suite against every wheel, then
@@ -128,7 +128,7 @@ release is published, and deploys to the `pypi` environment.
 One-time setup:
 
 1. On PyPI, add a *Trusted Publishers* entry for this repository
-   matching the `python-publish.yml` workflow and the `pypi` environment.
+   matching the `publish.yml` workflow and the `pypi` environment.
 2. In the repo settings, create a `pypi` GitHub environment.
 
 To publish a new version:

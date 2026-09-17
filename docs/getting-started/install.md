@@ -28,7 +28,7 @@ uv add pybox3d
 !!! note "PyPI availability"
     The wheels are built and published for every GitHub release via
     [`cibuildwheel`](https://cibuildwheel.pypa.io/) (see
-    `.github/workflows/python-publish.yml`).
+    `../../.github/workflows/publish.yml`).
 
 ## From source
 
