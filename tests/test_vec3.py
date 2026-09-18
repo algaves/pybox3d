@@ -1,6 +1,6 @@
 import pytest
 
-from pybox3d import Vec3
+from pybox3d import Quat, Vec3
 
 
 def test_default_construction():
@@ -76,3 +76,31 @@ def test_dot_and_cross_accept_plain_sequences():
 
 def test_repr_is_readable():
     assert repr(Vec3(1, 2, 3)) == "Vec3(1.0, 2.0, 3.0)"
+
+
+def test_construction_rejects_nan_and_inf():
+    with pytest.raises(ValueError):
+        Vec3(float("nan"), 0, 0)
+    with pytest.raises(ValueError):
+        Vec3(0, float("inf"), 0)
+    with pytest.raises(ValueError):
+        Vec3(0, 0, float("-inf"))
+
+
+def test_vec3_like_sequence_rejects_nan_and_inf():
+    # Vec3-accepting APIs (e.g. RigidBody constructors) parse a plain
+    # sequence via the same code path Vec3() itself does -- a non-finite
+    # component must be rejected there too, not just via Vec3()'s own
+    # constructor. Vec3.dot() accepts a VecLike sequence, so it's a
+    # convenient way to exercise that shared parsing path directly.
+    with pytest.raises(ValueError):
+        Vec3(1, 0, 0).dot((float("nan"), 0, 0))
+    with pytest.raises(ValueError):
+        Vec3(1, 0, 0).dot([0, float("inf"), 0])
+
+
+def test_quat_construction_rejects_nan_and_inf():
+    with pytest.raises(ValueError):
+        Quat(float("nan"), 0, 0, 1)
+    with pytest.raises(ValueError):
+        Quat(0, 0, 0, float("inf"))

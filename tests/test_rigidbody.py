@@ -61,3 +61,31 @@ def test_static_bodies_never_gain_velocity():
         world.step(1 / 60)
     assert handle.linear_velocity.to_tuple() == pytest.approx((0, 0, 0))
     assert handle.position.to_tuple() == pytest.approx((0, 0, 0))
+
+
+def test_mass_rejects_nan_and_inf():
+    body = RigidBody(Vec3(0, 0, 0), Vec3(1, 1, 1), mass=1.0)
+    with pytest.raises(ValueError):
+        body.mass = float("nan")
+    with pytest.raises(ValueError):
+        body.mass = float("inf")
+
+
+def test_restitution_and_friction_reject_nan_and_inf():
+    body = RigidBody(Vec3(0, 0, 0), Vec3(1, 1, 1), mass=1.0)
+    with pytest.raises(ValueError):
+        body.restitution = float("nan")
+    with pytest.raises(ValueError):
+        body.friction = float("inf")
+
+
+def test_box_constructor_rejects_nan_mass():
+    with pytest.raises(ValueError):
+        RigidBody(Vec3(0, 0, 0), Vec3(1, 1, 1), mass=float("nan"))
+
+
+def test_sphere_capsule_constructors_reject_nan_dimensions():
+    with pytest.raises(ValueError):
+        RigidBody.sphere(Vec3(0, 0, 0), float("nan"), mass=1.0)
+    with pytest.raises(ValueError):
+        RigidBody.capsule(Vec3(0, 0, 0), 0.5, float("inf"), mass=1.0)
