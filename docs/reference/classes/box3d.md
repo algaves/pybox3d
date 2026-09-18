@@ -47,4 +47,7 @@ if hit is not None:
 ## Methods
 
 See the [Box3D functions](../functions/box3d.md) page for the full method
-reference (`contains_point`, `aabb`, `overlaps`, `raycast`).
+reference (`contains_point`, `aabb`, `overlaps`, `raycast`). `overlaps()`
+accepts any of `Box3D`, [`Sphere`](sphere.md), or [`Capsule`](capsule.md)
+-- box-vs-box uses an exact SAT test, any other pair goes through a
+generic GJK/EPA core (see [Known limitations](../../limitations.md)).

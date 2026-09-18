@@ -67,18 +67,36 @@ nav:
           - Vec3: reference/classes/vec3.md
           - Quat: reference/classes/quat.md
           - Box3D: reference/classes/box3d.md
+          - Sphere: reference/classes/sphere.md
+          - Capsule: reference/classes/capsule.md
+          - ConvexHull: reference/classes/convexhull.md
+          - Compound: reference/classes/compound.md
+          - TriangleMesh: reference/classes/trianglemesh.md
+          - HeightField: reference/classes/heightfield.md
           - RigidBody: reference/classes/rigidbody.md
           - DistanceJoint: reference/classes/distancejoint.md
+          - Joint: reference/classes/joint.md
           - World: reference/classes/world.md
+          - WorldSnapshot: reference/classes/worldsnapshot.md
+          - CharacterMover: reference/classes/charactermover.md
           - ContactInfo: reference/classes/contactinfo.md
           - RayHit: reference/classes/rayhit.md
       - Functions:
           - Vec3: reference/functions/vec3.md
           - Quat: reference/functions/quat.md
           - Box3D: reference/functions/box3d.md
+          - Sphere: reference/functions/sphere.md
+          - Capsule: reference/functions/capsule.md
+          - ConvexHull: reference/functions/convexhull.md
+          - Compound: reference/functions/compound.md
+          - TriangleMesh: reference/functions/trianglemesh.md
+          - HeightField: reference/functions/heightfield.md
           - RigidBody: reference/functions/rigidbody.md
           - DistanceJoint: reference/functions/distancejoint.md
+          - Joint: reference/functions/joint.md
           - World: reference/functions/world.md
+          - WorldSnapshot: reference/functions/worldsnapshot.md
+          - CharacterMover: reference/functions/charactermover.md
   - Project:
       - Known limitations: limitations.md
       - Roadmap: roadmap.md

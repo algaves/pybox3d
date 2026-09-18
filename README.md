@@ -13,14 +13,29 @@ A Python wrapper, written directly against the **CPython C API** (no
 ctypes/cffi/pybind11/nanobind), around `libbox3d` -- a small, from-scratch
 C library providing:
 
-- **`Box3D`**: an axis-aligned or oriented 3D box (AABB/OBB), with
-  point-containment, SAT-based overlap, and ray-cast queries.
-- **`RigidBody`** / **`World`**: basic rigid-body dynamics scoped to
-  boxes -- mass/inertia, semi-implicit Euler integration, naive O(n²)
-  collision detection, and impulse-based resolution.
-- **`DistanceJoint`**: a rigid center-to-center distance constraint for
-  connecting two bodies (e.g. a pendulum, a chain link). See
-  [TODO.md](TODO.md) for the other joint types planned.
+- **`Box3D`** / **`Sphere`** / **`Capsule`** / **`ConvexHull`** /
+  **`Compound`** / **`TriangleMesh`** / **`HeightField`**: 3D shapes with
+  point-containment, overlap (exact SAT for box-vs-box, a generic
+  GJK/EPA core for anything else), and ray-cast queries. The last two
+  are always-static level geometry.
+- **`RigidBody`** / **`World`**: rigid-body dynamics -- mass/inertia,
+  semi-implicit Euler integration, sort-and-sweep broad phase +
+  impulse-based resolution, per-body sleeping, contact begin/end events,
+  AABB/raycast queries, and simple state snapshot/restore
+  (`WorldSnapshot`).
+- **`DistanceJoint`**: a distance constraint for connecting two bodies
+  (e.g. a pendulum, a chain link), anchored at a per-body local offset
+  (default each body's center), either rigid at `rest_length` or a soft
+  spring (`stiffness`/`damping`) optionally bounded by `min_length`/
+  `max_length`.
+- **`Joint`**: every other joint kind -- Spherical (ball-and-socket),
+  Revolute (hinge, with an optional motor), Prismatic (slider, with
+  optional limits/motor), Weld (full 6-DOF lock), Motor (a soft
+  spring-driven pose target), Wheel (suspension + free spin), Filter
+  (disables collision between a pair), and Parallel (angular-only Weld).
+- **`CharacterMover`**: a kinematic move-and-slide character controller,
+  plus Debug Draw (`RigidBody.debug_lines()`, `World.debug_contacts()`/
+  `.debug_joint_anchors()`) -- pure data, no rendering backend.
 
 ## Requirements
 
@@ -63,27 +78,62 @@ for _ in range(300):  # 5 seconds at 60Hz
 print(handle.position.y)  # settles near 0.5, resting on the ground
 ```
 
-The library has six public types:
+The library has fifteen public types:
 
 - **`Vec3`** / **`Quat`** -- a 3D vector and rotation quaternion, with the
   usual arithmetic (`+`, `-`, `*`, dot/cross product, normalization,
   axis-angle construction, rotating a `Vec3` by a `Quat`, ...). Anywhere a
   `Vec3`/`Quat` is expected, a plain 3- or 4-element tuple/list works too.
-- **`Box3D`** -- a standalone box shape: `contains_point()`,
-  `overlaps()` (SAT-based, returns a `ContactInfo` normal/penetration or
-  `None`), and `raycast()` (returns a `RayHit` or `None`).
-- **`RigidBody`** -- a box-shaped body with position, orientation,
-  velocities, mass, and `apply_force()`/`apply_impulse()`. A handle
-  returned by `World.add_body()`/`World.get_body()` is "world-backed":
-  reading/writing it reads/writes the body's live state inside the
-  `World`.
+- **`Box3D`** / **`Sphere`** / **`Capsule`** / **`ConvexHull`** /
+  **`Compound`** / **`TriangleMesh`** / **`HeightField`** -- standalone
+  shapes, each with `contains_point()`, `overlaps()` (accepts any of the
+  seven shape types, returns a `ContactInfo` normal/penetration/point or
+  `None`), and `raycast()` (returns a `RayHit` or `None`). `ConvexHull`
+  takes a pre-computed convex vertex set; `Compound` rigidly attaches
+  multiple leaf shapes (not nested `Compound`s) at local offsets;
+  `TriangleMesh`/`HeightField` are always-static level geometry.
+- **`RigidBody`** -- a rigid body with position, orientation, velocities,
+  mass, and `apply_force()`/`apply_impulse()`. The default constructor
+  makes a box-shaped body; `RigidBody.sphere()`/`.capsule()`/`.hull()`/
+  `.compound()`/`.mesh()`/`.heightfield()` are the other shape kinds'
+  equivalents (the last two always static). A handle returned by
+  `World.add_body()`/`World.get_body()` is "world-backed": reading/
+  writing it reads/writes the body's live state inside the `World`.
 - **`World`** -- owns a set of bodies and steps the simulation
-  (`step(dt)`), with naive O(n²) collision detection and impulse-based
-  resolution.
+  (`step(dt)`), with a sort-and-sweep broad phase and impulse-based
+  resolution, resolved over `solver_iterations` passes per step (default
+  4). Also has `query_aabb()`/`raycast_all()` queries, `contacts_began`/
+  `contacts_ended` event lists (read after each `step()` call), per-body
+  sleeping (`sleeping_enabled` and its thresholds, default on), and
+  `snapshot()`/`restore()` for simple state recording/replay.
+- **`WorldSnapshot`** -- an opaque, point-in-time recording of every
+  body's transform/velocity in a `World`, returned by `World.snapshot()`
+  and consumed by `World.restore()`.
 - **`DistanceJoint`** -- connects two bodies already in a `World` via
-  `World.add_joint(body_a, body_b, rest_length=None)`, holding the
-  distance between their centers at `rest_length` (defaults to their
-  current distance apart).
+  `World.add_joint(body_a, body_b, rest_length=None, anchor_a=(0,0,0),
+  anchor_b=(0,0,0), min_length=None, max_length=None, stiffness=0.0,
+  damping=0.0)`, holding the distance between the two world-space anchors
+  at `rest_length` (defaults to their current distance apart) -- rigidly
+  by default, or as a spring when `stiffness > 0`, optionally hard-capped
+  at `min_length`/`max_length`.
+- **`Joint`** -- every other joint kind, each via its own `World`
+  method: `add_spherical_joint()`, `add_revolute_joint()`,
+  `add_prismatic_joint()`, `add_weld_joint()`, `add_motor_joint()`,
+  `add_wheel_joint()`, `add_filter_joint()`, `add_parallel_joint()`.
+  `Joint.kind` says which one; only the attributes that kind uses are
+  settable.
+- **`CharacterMover`** -- a kinematic move-and-slide character
+  controller: `CharacterMover(position, shape)`, then
+  `.move(world, displacement)` each step to move it and resolve
+  collisions against `world`'s bodies (discrete push-out + slide, not
+  continuous/swept -- see [Known v1 limitations](#known-v1-limitations)).
+  Not a `RigidBody`; never added to a `World`.
+
+Debug Draw is pure data, not a type: `RigidBody.debug_lines()` (a
+wireframe approximation of a body's current shape) and
+`World.debug_contacts()`/`.debug_joint_anchors()` all return lists of
+`Vec3` pairs -- turning them into pixels is up to you, with whatever
+rendering setup you already have.
 
 See [`docs/`](docs/) for the full API reference (build it locally with
 `uv run mkdocs serve`, see below) and `examples/falling_box_demo.py` for a
@@ -169,36 +219,79 @@ altogether, publish through the CI workflow above.
 
 These are deliberate scope cuts for a "basic" first version, not bugs:
 
-- **Global contact materials**: `World.step` uses `World.default_restitution`
-  / `World.default_friction` for every contact rather than per-body mixing
-  rules. Each `RigidBody` still carries its own `restitution`/`friction`
-  fields for forward compatibility, but v1 doesn't consult them.
-- **No edge-edge contact normals**: `Box3D.overlaps()` runs a full 15-axis
-  SAT test to decide *whether* two boxes overlap, but only derives the
-  reported contact normal/penetration from face axes. Edge-edge contact
-  configurations report a face-based approximation rather than an exact
-  edge-edge normal.
-- **Linear-only contact impulses**: collision response applies impulses
-  without an angular (torque) contribution, which is enough for axis-aligned
-  stacking/resting scenarios but is a simplification for tumbling contacts.
-- **`World.remove_body` swap-removes**: removing a body moves the last
-  body into the freed slot. Any `RigidBody` handle still holding the old
-  index for that displaced body will silently resolve to a different body
-  (or raise `ValueError` if the slot is now out of range). `World.get_body`
-  always returns a fresh handle object, so `is` comparisons don't
-  identify a body across two calls.
-- **`DistanceJoint` only, anchored at body centers**: the only joint type
-  in v1 is a rigid center-to-center distance constraint -- no per-body
-  local anchor offset, no spring softness/limits, and (like contact
-  resolution) no angular/torque contribution. `World.remove_body` also
-  doesn't clean up joints referencing the removed/swapped index. See
-  [TODO.md](TODO.md) for the planned joint types.
-- **Joints solve once per step, sequentially, no inner iteration loop**
-  (like contact friction, above): fine for a short chain (2-3 links,
-  `examples/joint_chain_demo.py`), but a longer chain settles into a
-  visibly saggy steady state well past its `rest_length` since a
-  per-step correction only propagates to one neighboring joint at a
-  time.
+- **Single-point contacts, no persistent manifold**: every `overlaps()`
+  result (`ContactInfo`) carries exactly one representative contact
+  point, not a full multi-point manifold, and there's no warm-starting
+  between simulation steps.
+- **Approximate normal/penetration for round shapes**: any pair
+  involving a `Sphere`/`Capsule` goes through a generic GJK/EPA core
+  (box-vs-box keeps its exact SAT). On perfectly round shapes (e.g.
+  sphere-vs-sphere) the polytope EPA refines only approximates the true
+  curved surface, so the reported normal/penetration can be off by a
+  few percent.
+- **`ConvexHull` accepts only a pre-computed convex vertex set**: no
+  quickhull/incremental construction from a raw point cloud in v1, at
+  most `HULL_MAX_VERTICES` (32) vertices (shapes have no heap
+  allocation). Its `raycast()` is approximated via the hull's AABB
+  rather than an exact surface test.
+- **`ConvexHull`/`Compound` inertia is approximate**: a hull is treated
+  as a solid box of its own local AABB; a compound sums each child's
+  own inertia (mass split equally) via the parallel-axis theorem,
+  ignoring each child's local orientation.
+- **`Compound` doesn't support nesting**: children can be
+  `Box3D`/`Sphere`/`Capsule`/`ConvexHull`, not another `Compound`.
+- **`TriangleMesh`/`HeightField` are always static**: no `mass` parameter
+  on `RigidBody.mesh()`/`.heightfield()`, and setting `.mass` afterwards
+  raises `ValueError`. `contains_point()` always returns `False`;
+  `raycast()` is approximated via the shape's AABB. Fixed size caps
+  (`MESH_MAX_TRIANGLES`=64, `HEIGHTFIELD_MAX_ROWS`/`_COLS`=16). Collision
+  only supports mesh/height-field vs. a convex shape -- mesh/height-field
+  vs. mesh/height-field pairs always report no overlap.
+- **Contact restitution is linear-only; friction is full 6-DOF**: the
+  separating/restitution impulse doesn't torque either body, but
+  friction does (e.g. a sliding ball correctly picks up rolling spin).
+  Deliberate: a fully coupled normal-constraint solve was tried but
+  isn't stable with this project's single-pass, non-warm-started solver
+  for a body resting on an offset contact (e.g. an upright capsule on
+  its round cap) -- see [docs/limitations.md](docs/limitations.md) for
+  why. Restitution is also suppressed below a small closing-speed
+  threshold (matching Box2D's technique) to stop resting-contact noise
+  from reading as a repeated tiny bounce.
+- **Angular-locking joints are velocity-only**: Revolute/Prismatic/Weld/
+  Wheel/Parallel's rotation-locking DOF only ever cancel relative angular
+  *velocity* -- there's no positional correction pulling misaligned
+  bodies back into alignment (translation constraints, e.g. Distance or
+  the point part of a Spherical/Revolute/Weld, do get one). Revolute also
+  has no angle limits (would need swing-twist decomposition), and Motor's
+  linear/angular springs are fully decoupled (no torque-arm coupling
+  between them). See [docs/limitations.md](docs/limitations.md).
+- **Joint/contact solver iteration count is fixed, not adaptive**:
+  `World.solver_iterations` (default 4) runs that many velocity passes
+  per step over every joint/contact, plus (joints only) that many
+  positional Gauss-Seidel passes -- this substantially reduces the old
+  joint-chain-sag problem (an 8-link chain went from ~215% of its total
+  `rest_length` at 1 iteration to ~108% at the default 4), but doesn't
+  eliminate it, and a short/lightly-loaded chain pays the same iteration
+  cost as a long/heavy one. See
+  [docs/limitations.md](docs/limitations.md) for why contacts only
+  benefit from the velocity passes, not the positional ones.
+- **Contact events are polled, not a registered callback**, and
+  `contacts_ended` also fires when a pair falls asleep together (not
+  just on genuine separation), since sleeping pairs skip collision
+  entirely. Broad phase is sort-and-sweep, not a dynamic BVH tree.
+  Sleeping is per-body, not full connected-component islands, so one
+  body in a resting stack/jointed chain can sleep slightly before or
+  after its neighbors. See [docs/limitations.md](docs/limitations.md)
+  for the reasoning behind each.
+- **`CharacterMover` is discrete, not continuous/swept collision**, like
+  every other collision test in this library: `.move()` resolves
+  overlaps via push-out + slide after the fact, not a sweep-test-before-
+  you-move, so a character moving fast enough relative to a thin
+  obstacle in one call can tunnel straight through it. Debug Draw is
+  wireframe line segments only (`Sphere`/`Capsule` circles are
+  16-segment polygon approximations, `ConvexHull` draws its AABB) with no
+  rendering backend of its own. See
+  [docs/limitations.md](docs/limitations.md) for both.
 
 
 ## License
