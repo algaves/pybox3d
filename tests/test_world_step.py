@@ -80,20 +80,32 @@ def test_get_body_out_of_range_raises_index_error():
         world.get_body(0)
 
 
-def test_remove_body_swap_remove_semantics():
+def test_remove_body_swap_remove_preserves_relocated_handle():
     world = World(gravity=(0, 0, 0))
     world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(1, 1, 1), mass=1.0))
     world.add_body(RigidBody(Vec3(2, 0, 0), Vec3(1, 1, 1), mass=1.0))
     world.add_body(RigidBody(Vec3(3, 0, 0), Vec3(1, 1, 1), mass=1.0))
 
-    last_handle = world.get_body(2)
-    world.remove_body(0)  # swap-remove: index 0 now holds what was index 2
+    relocated_handle = world.get_body(2)
+    world.remove_body(0)  # swap-remove: dense slot 0 now holds what was slot 2
 
     assert world.body_count == 2
-    # Documented v1 caveat: a handle constructed for the old index 2 now
-    # resolves through index 2, which is out of range post-removal.
+    # RigidBody handles track a stable id, not a raw dense index, so
+    # relocated_handle still correctly resolves to the body that used to
+    # be at index 2 even though it now lives at slot 0.
+    assert relocated_handle.position.to_tuple() == pytest.approx((3, 0, 0))
+
+
+def test_remove_body_invalidates_handle_to_the_removed_body():
+    world = World(gravity=(0, 0, 0))
+    world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(1, 1, 1), mass=1.0))
+    world.add_body(RigidBody(Vec3(2, 0, 0), Vec3(1, 1, 1), mass=1.0))
+
+    removed_handle = world.get_body(0)
+    world.remove_body(0)
+
     with pytest.raises(ValueError):
-        _ = last_handle.position
+        _ = removed_handle.position
 
 
 def test_removed_body_handle_raises_on_access():

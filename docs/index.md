@@ -4,17 +4,22 @@ icon: material/cube
 
 # pybox3d
 
-A Python wrapper, written directly against the **CPython C API** (no
-ctypes/cffi/pybind11/nanobind), around `libbox3d` — a small, from-scratch
+Python bindings, written directly against the **CPython C API** (no
+ctypes/cffi/pybind11/nanobind), for `libbox3d` — a small, from-scratch
 C library providing:
 
-- **`Box3D`** — an axis-aligned or oriented 3D box (AABB/OBB), with
-  point-containment, SAT-based overlap, and ray-cast queries.
-- **`RigidBody`** / **`World`** — basic rigid-body dynamics scoped to
-  boxes: mass/inertia, semi-implicit Euler integration, naive O(n²)
-  collision detection, and impulse-based resolution.
-- **`DistanceJoint`** — a rigid center-to-center distance constraint for
-  connecting two bodies (pendulums, chains, ...).
+- **`Box3D`** / **`Sphere`** / **`Capsule`** / **`ConvexHull`** /
+  **`Compound`** / **`TriangleMesh`** / **`HeightField`** — 3D shapes
+  with point-containment, overlap (exact SAT for box-vs-box, a generic
+  GJK/EPA core otherwise), and ray-cast queries. The last two are
+  always-static level geometry.
+- **`RigidBody`** / **`World`** — basic rigid-body dynamics: mass/
+  inertia, semi-implicit Euler integration, naive O(n²) collision
+  detection, and impulse-based resolution.
+- **`DistanceJoint`** / **`Joint`** — nine joint kinds for connecting two
+  bodies: a rigid-or-spring distance constraint (pendulums, chains, ...),
+  plus Spherical, Revolute, Prismatic, Weld, Motor, Wheel, Filter, and
+  Parallel.
 
 ## Layout
 
@@ -29,6 +34,8 @@ C library providing:
 
 See [Getting started](getting-started/quickstart.md) to build the
 extension and run the tests, the [Reference](reference/classes/vec3.md)
-for `Vec3`, `Quat`, `Box3D`, `RigidBody`, `World`, and `DistanceJoint`,
-[Known limitations](limitations.md) for deliberate v1 scope cuts, and
-[Roadmap](roadmap.md) for what's planned next.
+for `Vec3`, `Quat`, `Box3D`, `Sphere`, `Capsule`, `ConvexHull`,
+`Compound`, `TriangleMesh`, `HeightField`, `RigidBody`, `World`,
+`DistanceJoint`, and `Joint`, [Known limitations](limitations.md) for
+deliberate v1 scope cuts, and [Roadmap](roadmap.md) for what's planned
+next.

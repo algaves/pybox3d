@@ -92,7 +92,7 @@ def test_get_joint_out_of_range_raises_index_error():
         world.get_joint(0)
 
 
-def test_remove_joint_swap_remove_semantics():
+def test_remove_joint_swap_remove_preserves_relocated_handle():
     world = World(gravity=(0, 0, 0))
     a = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
     b = world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
@@ -100,10 +100,50 @@ def test_remove_joint_swap_remove_semantics():
 
     world.add_joint(a, b, rest_length=1.0)
     world.add_joint(a, b, rest_length=2.0)
-    last_joint = world.add_joint(b, c, rest_length=3.0)
+    relocated_joint = world.add_joint(b, c, rest_length=3.0)
 
-    world.remove_joint(0)  # swap-remove: index 0 now holds what was index 2
+    world.remove_joint(0)  # swap-remove: dense slot 0 now holds what was slot 2
 
     assert world.joint_count == 2
+    # DistanceJoint handles track a stable id, not a raw dense index, so
+    # relocated_joint still correctly resolves to the (b, c) joint even
+    # though it now lives at a different slot.
+    assert relocated_joint.rest_length == pytest.approx(3.0)
+
+
+def test_remove_joint_invalidates_handle_to_the_removed_joint():
+    world = World(gravity=(0, 0, 0))
+    a = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
+    b = world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
+
+    removed_joint = world.add_joint(a, b, rest_length=1.0)
+    world.remove_joint(0)
+
     with pytest.raises(ValueError):
-        _ = last_joint.rest_length
+        _ = removed_joint.rest_length
+
+
+def test_remove_body_also_drops_and_invalidates_its_joints():
+    world = World(gravity=(0, 0, 0))
+    a = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
+    b = world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
+    joint = world.add_joint(a, b, rest_length=1.0)
+
+    world.remove_body(0)  # removes `a`, which the joint references
+
+    assert world.joint_count == 0
+    with pytest.raises(ValueError):
+        _ = joint.rest_length
+
+
+def test_remove_body_leaves_unrelated_joints_intact():
+    world = World(gravity=(0, 0, 0))
+    world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
+    b = world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
+    c = world.add_body(RigidBody(Vec3(2, 0, 0), Vec3(0.5, 0.5, 0.5), mass=1.0))
+    joint = world.add_joint(b, c, rest_length=1.0)
+
+    world.remove_body(0)  # removes the first body, unrelated to the (b, c) joint
+
+    assert world.joint_count == 1
+    assert joint.rest_length == pytest.approx(1.0)

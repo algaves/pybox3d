@@ -8,7 +8,7 @@ See the [Box3D class](../classes/box3d.md) for attributes and the constructor.
 |---|---|---|---|
 | `contains_point` | `contains_point(point: VecLike) -> bool` | `bool` | Whether `point` lies inside the box. |
 | `aabb` | `aabb() -> tuple[Vec3, Vec3]` | `(Vec3 min, Vec3 max)` | The box's world-space axis-aligned bounding box. |
-| `overlaps` | `overlaps(other: Box3D) -> ContactInfo \| None` | `ContactInfo \| None` | SAT overlap test; `None` if disjoint. |
+| `overlaps` | `overlaps(other: ShapeLike) -> ContactInfo \| None` | `ContactInfo \| None` | Overlap test (exact SAT vs. another `Box3D`, GJK/EPA otherwise); `None` if disjoint. |
 | `raycast` | `raycast(origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit \| None` | `RayHit \| None` | Ray/box intersection; `None` if no hit within `max_t`. |
 
 ## `overlaps` return value
@@ -26,10 +26,14 @@ if contact is not None:
     print(contact.normal, contact.penetration)
 ```
 
-`overlaps()` runs a full 15-axis SAT test to decide *whether* two boxes
-overlap, but only derives the reported `normal`/`penetration` from face
-axes. See [Known limitations](../../limitations.md) for the edge-edge
-case.
+`overlaps()` runs a full 15-axis SAT test against another `Box3D` and
+reports the exact least-penetrating axis -- a face normal, or (when it's
+genuinely the tightest of all 15) an exact edge-edge normal, with
+`point` placed at the two edges' closest points rather than approximated
+via support points. Against any other shape type, this goes through the
+generic GJK/EPA core instead -- see
+[Known limitations](../../limitations.md) for its round-shape precision
+caveat.
 
 ## `raycast` return value
 

@@ -1,7 +1,7 @@
 [project]
 name = "pybox3d"
 version = "2026a1"
-description = "CPython C-API wrapper around a from-scratch 3D box geometry + rigid-body physics library"
+description = "Python bindings (CPython C-API) for libbox3d, a 3D box geometry + rigid-body physics library"
 readme = "README.md"
 authors = [
     { name = "Algaves" },
@@ -88,8 +88,19 @@ module = [
     "test_import",
     "test_vec3",
     "test_box3d",
+    "test_sphere",
+    "test_capsule",
+    "test_convexhull",
+    "test_compound",
+    "test_trianglemesh",
+    "test_heightfield",
+    "test_contact_materials",
     "test_rigidbody",
     "test_world_step",
     "test_joint",
+    "test_joint_advanced",
+    "test_joint_kinds",
+    "test_world_simulation",
+    "test_utilities",
 ]
 disallow_untyped_defs = false

@@ -3,12 +3,12 @@ hangs from a static anchor and settles under gravity, showing
 World.add_joint() used repeatedly to build a multi-link constraint chain
 rather than just a single pendulum.
 
-Note: World.step solves each joint once per step, sequentially, with no
-inner iteration loop (like contact resolution, see README limitations).
-For a short chain like this one that converges close enough to look
-right, but longer chains visibly sag well past their rest_length as
-per-step corrections take multiple frames to propagate from one end to
-the other -- see docs/limitations.md.
+Note: World.step resolves each joint over World.solver_iterations passes
+per step (default 4), which substantially reduces -- but, being a fixed
+iteration count rather than a convergence check, doesn't eliminate --
+chain sag past rest_length for longer chains. Raise solver_iterations
+(World(..., solver_iterations=8)) for a tighter chain at the cost of more
+work per step -- see docs/limitations.md.
 
 Run with:
     uv run python examples/joint_chain_demo.py

@@ -18,9 +18,18 @@ Python_add_library(_pybox3d MODULE WITH_SOABI
     src/pybox3d/_ext/py_vec3.c
     src/pybox3d/_ext/py_quat.c
     src/pybox3d/_ext/py_box3d.c
+    src/pybox3d/_ext/py_sphere.c
+    src/pybox3d/_ext/py_capsule.c
+    src/pybox3d/_ext/py_hull.c
+    src/pybox3d/_ext/py_compound.c
+    src/pybox3d/_ext/py_mesh.c
+    src/pybox3d/_ext/py_heightfield.c
+    src/pybox3d/_ext/py_shape.c
     src/pybox3d/_ext/py_rigidbody.c
     src/pybox3d/_ext/py_joint.c
     src/pybox3d/_ext/py_world.c
+    src/pybox3d/_ext/py_worldsnapshot.c
+    src/pybox3d/_ext/py_character.c
 )
 
 target_link_libraries(_pybox3d PRIVATE box3d)

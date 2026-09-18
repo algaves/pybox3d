@@ -29,10 +29,11 @@ Run it with:
 uv run python examples/joint_chain_demo.py
 ```
 
-The demo deliberately keeps the chain short (3 links). `World.step`
-solves each joint once per step with no inner iteration loop, so a
-correction at one joint only reaches its immediate neighbor within a given
-step; a longer chain converges to a visibly saggy steady state well past
-`rest_length` rather than a taut one -- see
+`World.step` resolves each joint over `World.solver_iterations` passes
+per step (default 4, settable via `World(..., solver_iterations=...)`),
+which substantially reduces -- but doesn't eliminate -- sag past
+`rest_length` for longer chains; a short chain like this demo's 3 links
+already looks taut at the default. See
 [Known limitations](../limitations.md). The
-[A joint chain](../tutorials/joint-chain.md) tutorial explains why.
+[A joint chain](../tutorials/joint-chain.md) tutorial explains why and
+shows the effect of raising `solver_iterations` on a longer chain.
