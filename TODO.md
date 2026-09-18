@@ -3,7 +3,7 @@
 Also published as [Roadmap](docs/roadmap.md) in the MkDocs site -- keep
 both in sync when either changes.
 
-Missing elements for the `pybox3d` / `libbox3d` wrapper, tracked against
+Missing elements for the `pybox3d` / `libbox3d` bindings, tracked against
 the topics a mature 3D physics library's docs cover:
 <https://box2d.org/documentation3d/topics.html>
 

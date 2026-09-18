@@ -9,8 +9,8 @@
 ![License](https://img.shields.io/badge/license-LGPL--2.1-green?style=flat-square)
 
 
-A Python wrapper, written directly against the **CPython C API** (no
-ctypes/cffi/pybind11/nanobind), around `libbox3d` -- a small, from-scratch
+Python bindings, written directly against the **CPython C API** (no
+ctypes/cffi/pybind11/nanobind), for `libbox3d` -- a small, from-scratch
 C library providing:
 
 - **`Box3D`** / **`Sphere`** / **`Capsule`** / **`ConvexHull`** /
