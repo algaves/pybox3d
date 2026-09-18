@@ -14,6 +14,11 @@ __version__: str
 
 BOX_KIND_AABB: int
 BOX_KIND_OBB: int
+HULL_MAX_VERTICES: int
+COMPOUND_MAX_CHILDREN: int
+MESH_MAX_TRIANGLES: int
+HEIGHTFIELD_MAX_ROWS: int
+HEIGHTFIELD_MAX_COLS: int
 
 VecLike = Union["Vec3", Sequence[float]]
 QuatLike = Union["Quat", Sequence[float]]
@@ -60,11 +65,18 @@ class Quat:
 class ContactInfo(NamedTuple):
     normal: Vec3
     penetration: float
+    point: Vec3
 
 class RayHit(NamedTuple):
     t: float
     point: Vec3
     normal: Vec3
+
+LeafShapeLike = Union["Box3D", "Sphere", "Capsule", "ConvexHull"]
+ShapeLike = Union[LeafShapeLike, "Compound", "TriangleMesh", "HeightField"]
+CompoundChildEntry = (
+    tuple[VecLike, LeafShapeLike] | tuple[VecLike, QuatLike | None, LeafShapeLike]
+)
 
 class Box3D:
     center: Vec3
@@ -77,7 +89,106 @@ class Box3D:
     ) -> None: ...
     def contains_point(self, point: VecLike) -> bool: ...
     def aabb(self) -> tuple[Vec3, Vec3]: ...
-    def overlaps(self, other: Box3D) -> ContactInfo | None: ...
+    def overlaps(self, other: ShapeLike) -> ContactInfo | None: ...
+    def raycast(self, origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit | None: ...
+
+class Sphere:
+    center: Vec3
+    radius: float
+
+    def __init__(self, center: VecLike, radius: float) -> None: ...
+    def contains_point(self, point: VecLike) -> bool: ...
+    def aabb(self) -> tuple[Vec3, Vec3]: ...
+    def overlaps(self, other: ShapeLike) -> ContactInfo | None: ...
+    def raycast(self, origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit | None: ...
+
+class Capsule:
+    center: Vec3
+    orientation: Quat
+    radius: float
+    half_height: float
+
+    def __init__(
+        self,
+        center: VecLike,
+        radius: float,
+        half_height: float,
+        orientation: QuatLike | None = None,
+    ) -> None: ...
+    def contains_point(self, point: VecLike) -> bool: ...
+    def aabb(self) -> tuple[Vec3, Vec3]: ...
+    def overlaps(self, other: ShapeLike) -> ContactInfo | None: ...
+    def raycast(self, origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit | None: ...
+
+class ConvexHull:
+    center: Vec3
+    orientation: Quat
+    @property
+    def vertex_count(self) -> int: ...
+    @property
+    def vertices(self) -> tuple[Vec3, ...]: ...
+
+    def __init__(
+        self, center: VecLike, vertices: Sequence[VecLike], orientation: QuatLike | None = None
+    ) -> None: ...
+    def contains_point(self, point: VecLike) -> bool: ...
+    def aabb(self) -> tuple[Vec3, Vec3]: ...
+    def overlaps(self, other: ShapeLike) -> ContactInfo | None: ...
+    def raycast(self, origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit | None: ...
+
+class Compound:
+    center: Vec3
+    orientation: Quat
+    @property
+    def child_count(self) -> int: ...
+
+    def __init__(
+        self,
+        center: VecLike,
+        children: Sequence[CompoundChildEntry],
+        orientation: QuatLike | None = None,
+    ) -> None: ...
+    def contains_point(self, point: VecLike) -> bool: ...
+    def aabb(self) -> tuple[Vec3, Vec3]: ...
+    def overlaps(self, other: ShapeLike) -> ContactInfo | None: ...
+    def raycast(self, origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit | None: ...
+
+class TriangleMesh:
+    center: Vec3
+    orientation: Quat
+    @property
+    def triangle_count(self) -> int: ...
+
+    def __init__(
+        self,
+        center: VecLike,
+        triangles: Sequence[Sequence[VecLike]],
+        orientation: QuatLike | None = None,
+    ) -> None: ...
+    def contains_point(self, point: VecLike) -> bool: ...
+    def aabb(self) -> tuple[Vec3, Vec3]: ...
+    def overlaps(self, other: ShapeLike) -> ContactInfo | None: ...
+    def raycast(self, origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit | None: ...
+
+class HeightField:
+    center: Vec3
+    orientation: Quat
+    cell_size: float
+    @property
+    def rows(self) -> int: ...
+    @property
+    def cols(self) -> int: ...
+
+    def __init__(
+        self,
+        center: VecLike,
+        heights: Sequence[Sequence[float]],
+        cell_size: float = 1.0,
+        orientation: QuatLike | None = None,
+    ) -> None: ...
+    def contains_point(self, point: VecLike) -> bool: ...
+    def aabb(self) -> tuple[Vec3, Vec3]: ...
+    def overlaps(self, other: ShapeLike) -> ContactInfo | None: ...
     def raycast(self, origin: VecLike, direction: VecLike, max_t: float = ...) -> RayHit | None: ...
 
 class RigidBody:
@@ -92,14 +203,75 @@ class RigidBody:
     @property
     def inv_mass(self) -> float: ...
     @property
-    def shape(self) -> Box3D: ...
+    def shape(self) -> ShapeLike: ...
+    @property
+    def is_sleeping(self) -> bool: ...
     def __init__(self, position: VecLike, half_extents: VecLike, mass: float = 0.0) -> None: ...
+    @classmethod
+    def sphere(cls, position: VecLike, radius: float, mass: float = 0.0) -> RigidBody: ...
+    @classmethod
+    def capsule(
+        cls, position: VecLike, radius: float, half_height: float, mass: float = 0.0
+    ) -> RigidBody: ...
+    @classmethod
+    def hull(
+        cls, position: VecLike, vertices: Sequence[VecLike], mass: float = 0.0
+    ) -> RigidBody: ...
+    @classmethod
+    def compound(
+        cls, position: VecLike, children: Sequence[CompoundChildEntry], mass: float = 0.0
+    ) -> RigidBody: ...
+    @classmethod
+    def mesh(cls, position: VecLike, triangles: Sequence[Sequence[VecLike]]) -> RigidBody: ...
+    @classmethod
+    def heightfield(
+        cls, position: VecLike, heights: Sequence[Sequence[float]], cell_size: float = 1.0
+    ) -> RigidBody: ...
     def apply_force(self, force: VecLike, point: VecLike | None = None) -> None: ...
     def apply_impulse(self, impulse: VecLike, point: VecLike | None = None) -> None: ...
     def clear_accumulators(self) -> None: ...
+    def wake(self) -> None: ...
+    def debug_lines(self) -> list[tuple[Vec3, Vec3]]: ...
 
 class DistanceJoint:
     rest_length: float
+    anchor_a: Vec3
+    anchor_b: Vec3
+    has_limits: bool
+    min_length: float
+    max_length: float
+    stiffness: float
+    damping: float
+    @property
+    def body_a(self) -> RigidBody: ...
+    @property
+    def body_b(self) -> RigidBody: ...
+
+class Joint:
+    """Every joint kind other than DistanceJoint. `kind` says which one;
+    only the attributes that kind actually uses are settable -- accessing
+    one that doesn't apply raises AttributeError."""
+
+    kind: str
+    anchor_a: Vec3
+    anchor_b: Vec3
+    axis: Vec3
+    suspension_axis: Vec3
+    axle_axis: Vec3
+    has_limits: bool
+    min_translation: float
+    max_translation: float
+    enable_motor: bool
+    motor_speed: float
+    max_motor_effort: float
+    suspension_stiffness: float
+    suspension_damping: float
+    linear_offset: Vec3
+    angular_offset: Quat
+    linear_stiffness: float
+    linear_damping: float
+    angular_stiffness: float
+    angular_damping: float
     @property
     def body_a(self) -> RigidBody: ...
     @property
@@ -107,19 +279,117 @@ class DistanceJoint:
 
 class World:
     gravity: Vec3
-    default_restitution: float
-    default_friction: float
+    solver_iterations: int
+    sleeping_enabled: bool
+    sleep_linear_threshold: float
+    sleep_angular_threshold: float
+    sleep_time_threshold: float
     @property
     def body_count(self) -> int: ...
     @property
     def joint_count(self) -> int: ...
-    def __init__(self, gravity: VecLike = ..., initial_capacity: int = 8) -> None: ...
+    @property
+    def contacts_began(self) -> list[tuple[RigidBody, RigidBody]]: ...
+    @property
+    def contacts_ended(self) -> list[tuple[RigidBody, RigidBody]]: ...
+    def __init__(
+        self, gravity: VecLike = ..., initial_capacity: int = 8, solver_iterations: int = 4
+    ) -> None: ...
     def add_body(self, body: RigidBody) -> RigidBody: ...
     def get_body(self, index: int) -> RigidBody: ...
     def remove_body(self, index: int) -> None: ...
     def add_joint(
-        self, body_a: RigidBody, body_b: RigidBody, rest_length: float | None = None
+        self,
+        body_a: RigidBody,
+        body_b: RigidBody,
+        rest_length: float | None = None,
+        anchor_a: VecLike = ...,
+        anchor_b: VecLike = ...,
+        min_length: float | None = None,
+        max_length: float | None = None,
+        stiffness: float = 0.0,
+        damping: float = 0.0,
     ) -> DistanceJoint: ...
-    def get_joint(self, index: int) -> DistanceJoint: ...
+    def add_spherical_joint(
+        self, body_a: RigidBody, body_b: RigidBody, anchor_a: VecLike = ..., anchor_b: VecLike = ...
+    ) -> Joint: ...
+    def add_revolute_joint(
+        self,
+        body_a: RigidBody,
+        body_b: RigidBody,
+        axis: VecLike,
+        anchor_a: VecLike = ...,
+        anchor_b: VecLike = ...,
+        enable_motor: bool = False,
+        motor_speed: float = 0.0,
+        max_motor_effort: float = 0.0,
+    ) -> Joint: ...
+    def add_prismatic_joint(
+        self,
+        body_a: RigidBody,
+        body_b: RigidBody,
+        axis: VecLike,
+        anchor_a: VecLike = ...,
+        anchor_b: VecLike = ...,
+        min_translation: float | None = None,
+        max_translation: float | None = None,
+        enable_motor: bool = False,
+        motor_speed: float = 0.0,
+        max_motor_effort: float = 0.0,
+    ) -> Joint: ...
+    def add_weld_joint(
+        self, body_a: RigidBody, body_b: RigidBody, anchor_a: VecLike = ..., anchor_b: VecLike = ...
+    ) -> Joint: ...
+    def add_motor_joint(
+        self,
+        body_a: RigidBody,
+        body_b: RigidBody,
+        linear_offset: VecLike = ...,
+        angular_offset: QuatLike = ...,
+        linear_stiffness: float = 0.0,
+        linear_damping: float = 0.0,
+        angular_stiffness: float = 0.0,
+        angular_damping: float = 0.0,
+    ) -> Joint: ...
+    def add_wheel_joint(
+        self,
+        body_a: RigidBody,
+        body_b: RigidBody,
+        suspension_axis: VecLike,
+        axle_axis: VecLike,
+        anchor_a: VecLike = ...,
+        anchor_b: VecLike = ...,
+        min_translation: float | None = None,
+        max_translation: float | None = None,
+        suspension_stiffness: float = 0.0,
+        suspension_damping: float = 0.0,
+    ) -> Joint: ...
+    def add_filter_joint(self, body_a: RigidBody, body_b: RigidBody) -> Joint: ...
+    def add_parallel_joint(self, body_a: RigidBody, body_b: RigidBody) -> Joint: ...
+    def get_joint(self, index: int) -> DistanceJoint | Joint: ...
     def remove_joint(self, index: int) -> None: ...
+    def query_aabb(self, min: VecLike, max: VecLike) -> list[RigidBody]: ...
+    def raycast_all(
+        self, origin: VecLike, direction: VecLike, max_distance: float = ...
+    ) -> list[tuple[RigidBody, RayHit]]: ...
+    def snapshot(self) -> WorldSnapshot: ...
+    def restore(self, snapshot: WorldSnapshot) -> None: ...
+    def debug_contacts(self) -> list[tuple[Vec3, Vec3]]: ...
+    def debug_joint_anchors(self) -> list[tuple[Vec3, Vec3]]: ...
     def step(self, dt: float) -> None: ...
+
+class WorldSnapshot:
+    def __len__(self) -> int: ...
+
+class CharacterMover:
+    position: Vec3
+    velocity: Vec3
+    skin_width: float
+    max_slide_iterations: int
+    ground_normal_min_y: float
+    @property
+    def is_grounded(self) -> bool: ...
+    @property
+    def shape(self) -> ShapeLike: ...
+    def __init__(self, position: VecLike, shape: ShapeLike) -> None: ...
+    def move(self, world: World, displacement: VecLike) -> None: ...

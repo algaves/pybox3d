@@ -1,6 +1,7 @@
 #include "py_box3d.h"
 #include "py_vec3.h"
 #include "py_quat.h"
+#include "py_shape.h"
 
 #include <float.h>
 
@@ -155,12 +156,13 @@ static PyObject *box3d_aabb(PyBox3DObject *self, PyObject *Py_UNUSED(ignored)) {
 }
 
 static PyObject *box3d_overlaps(PyBox3DObject *self, PyObject *arg) {
-    if (!PyBox3D_Check(arg)) {
-        PyErr_SetString(PyExc_TypeError, "overlaps() argument must be a Box3D");
+    b3_Shape other_shape;
+    if (PyShape_Parse(arg, &other_shape) < 0) {
         return NULL;
     }
+    b3_Shape self_shape = b3_shape_from_box(self->value);
     b3_ContactInfo contact;
-    int hit = b3_box3d_overlap(&self->value, &((PyBox3DObject *)arg)->value, &contact);
+    int hit = b3_shape_overlap(&self_shape, &other_shape, &contact);
     if (!hit) {
         Py_RETURN_NONE;
     }
@@ -170,18 +172,18 @@ static PyObject *box3d_overlaps(PyBox3DObject *self, PyObject *arg) {
         return NULL;
     }
     PyObject *normal = PyVec3_FromVec3(contact.normal);
-    if (normal == NULL) {
-        Py_DECREF(result);
-        return NULL;
-    }
-    PyObject *penetration = PyFloat_FromDouble((double)contact.penetration);
-    if (penetration == NULL) {
-        Py_DECREF(normal);
+    PyObject *penetration = normal ? PyFloat_FromDouble((double)contact.penetration) : NULL;
+    PyObject *point = penetration ? PyVec3_FromVec3(contact.point) : NULL;
+    if (normal == NULL || penetration == NULL || point == NULL) {
+        Py_XDECREF(normal);
+        Py_XDECREF(penetration);
+        Py_XDECREF(point);
         Py_DECREF(result);
         return NULL;
     }
     PyStructSequence_SET_ITEM(result, 0, normal);
     PyStructSequence_SET_ITEM(result, 1, penetration);
+    PyStructSequence_SET_ITEM(result, 2, point);
     return result;
 }
 
@@ -230,7 +232,9 @@ static PyObject *box3d_raycast(PyBox3DObject *self, PyObject *args, PyObject *kw
 static PyMethodDef box3d_methods[] = {
     {"contains_point", (PyCFunction)box3d_contains_point, METH_O, "contains_point(point) -> bool"},
     {"aabb", (PyCFunction)box3d_aabb, METH_NOARGS, "aabb() -> (Vec3 min, Vec3 max)"},
-    {"overlaps", (PyCFunction)box3d_overlaps, METH_O, "overlaps(other: Box3D) -> ContactInfo | None"},
+    {"overlaps", (PyCFunction)box3d_overlaps, METH_O,
+     "overlaps(other: Box3D | Sphere | Capsule | ConvexHull | Compound | TriangleMesh | "
+     "HeightField) -> ContactInfo | None"},
     {"raycast", (PyCFunction)box3d_raycast, METH_VARARGS | METH_KEYWORDS,
      "raycast(origin, direction, max_t=inf) -> RayHit | None"},
     {NULL},
@@ -253,15 +257,17 @@ PyTypeObject PyBox3D_Type = {
 };
 
 static PyStructSequence_Field contact_info_fields[] = {
-    {"normal", "unit-length contact normal, pointing from the first box towards the second"},
+    {"normal", "unit-length contact normal, pointing from the first shape towards the second"},
     {"penetration", "penetration depth along `normal`, in world units (>= 0)"},
+    {"point", "v1: one representative world-space contact point, not a full manifold"},
     {NULL},
 };
 static PyStructSequence_Desc contact_info_desc = {
     "pybox3d.ContactInfo",
-    "Result of Box3D.overlaps(): overlap normal and penetration depth.",
+    "Result of Box3D/Sphere/Capsule.overlaps(): overlap normal, penetration depth, and a "
+    "representative contact point.",
     contact_info_fields,
-    2,
+    3,
 };
 
 static PyStructSequence_Field ray_hit_fields[] = {
