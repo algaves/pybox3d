@@ -54,12 +54,18 @@ nav:
       - A swinging pendulum: tutorials/pendulum.md
       - A joint chain: tutorials/joint-chain.md
       - A drifting dumbbell: tutorials/dumbbell.md
+      - A simple robot arm: tutorials/joint-types.md
+      - A CharacterMover: tutorials/character-mover.md
+      - Debug Draw: tutorials/debug-draw.md
   - Examples:
       - Overview: examples/index.md
       - Falling box: examples/falling-box.md
       - Pendulum joint: examples/pendulum.md
       - Joint chain: examples/joint-chain.md
       - Dumbbell: examples/dumbbell.md
+      - Joint types: examples/joint-types.md
+      - Character mover: examples/character-mover.md
+      - Debug draw: examples/debug-draw.md
   - Reference:
       - Modules:
           - pybox3d: reference/modules/pybox3d.md
