@@ -147,7 +147,7 @@ def test_prismatic_joint_locks_relative_rotation(approx):
 def test_prismatic_joint_motor_drives_toward_target_speed(approx):
     world = World(gravity=(0, 0, 0))
     rail = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.1, 0.1, 0.1), mass=0.0))
-    cart = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.1, 0.1, 0.1), mass=1.0))
+    cart = world.add_body(RigidBody(Vec3(0.25, 0, 0), Vec3(0.1, 0.1, 0.1), mass=1.0))
     world.add_prismatic_joint(
         rail, cart, axis=Vec3(1, 0, 0), enable_motor=True, motor_speed=1.0, max_motor_effort=50.0
     )

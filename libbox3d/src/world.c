@@ -1229,10 +1229,12 @@ typedef struct {
 } b3_SweepEntry;
 
 static int sweep_entry_cmp(const void *lhs, const void *rhs) {
-    b3_real a = ((const b3_SweepEntry *)lhs)->min_x;
-    b3_real b = ((const b3_SweepEntry *)rhs)->min_x;
-    if (a < b) return -1;
-    if (a > b) return 1;
+    const b3_SweepEntry *la = (const b3_SweepEntry *)lhs;
+    const b3_SweepEntry *rb = (const b3_SweepEntry *)rhs;
+    if (la->min_x < rb->min_x) return -1;
+    if (la->min_x > rb->min_x) return 1;
+    if (la->body_index < rb->body_index) return -1;
+    if (la->body_index > rb->body_index) return 1;
     return 0;
 }
 

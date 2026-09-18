@@ -196,6 +196,11 @@ See [TODO.md](TODO.md) for what's still missing.
 
 ### Fixed
 
+- Broad-phase sort-and-sweep pair ordering is now deterministic: equal
+  AABB `min_x` values break ties by body index. An unstable `qsort` tie
+  previously made a coincident-body prismatic-motor test fail only on
+  Windows (MSVC reorders equal elements differently than glibc/clang);
+  that test also no longer starts with the cart fully inside the rail.
 - The PyPI publish workflow now ignores platform-tag problems: the
   `pypi-publish` job runs on `workflow_dispatch` as well as on release
   (both via trusted publishing on the `pypi` environment), and the README
