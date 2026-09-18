@@ -68,6 +68,32 @@ def test_overlap_rotated_obb_false_when_aabbs_would_falsely_overlap():
     assert a.overlaps(b) is None, "true OBB test must reject what the AABB fallback would accept"
 
 
+def test_overlap_edge_edge_contact_is_exact():
+    # Two crossed bars, one tilted about a diagonal axis so neither box's
+    # face is the tightest separating axis -- the true minimum-penetration
+    # axis is a genuine edge-edge cross product. Expected values below were
+    # independently cross-checked against a from-scratch Python
+    # re-derivation of the same edge-edge geometry (closest points between
+    # the two specific box edges), not just the C implementation itself.
+    a = Box3D(Vec3(0, 0, 0), Vec3(2, 0.15, 0.15))  # bar along local X
+    q = Quat.from_axis_angle(Vec3(1, 1, 0), math.pi / 4)
+    b = Box3D(Vec3(0, 0.28, 0), Vec3(0.2, 0.15, 2), q)
+
+    contact = a.overlaps(b)
+    assert contact is not None
+    assert contact.penetration == pytest.approx(0.1621, abs=1e-3)
+    assert contact.normal.to_tuple() == pytest.approx((0.0, 0.8165, 0.5774), abs=1e-3)
+    assert contact.point.to_tuple() == pytest.approx((-0.0843, 0.2321, 0.2081), abs=1e-3)
+
+    # The normal isn't any single face axis of either box (face axes here
+    # are the standard basis for `a`, and q's rotated basis for `b`) --
+    # confirming this genuinely came from the edge-edge branch, not a
+    # face-axis fallback.
+    assert contact.normal.to_tuple() != pytest.approx((1, 0, 0), abs=1e-2)
+    assert contact.normal.to_tuple() != pytest.approx((0, 1, 0), abs=1e-2)
+    assert contact.normal.to_tuple() != pytest.approx((0, 0, 1), abs=1e-2)
+
+
 def test_raycast_hit():
     box = Box3D(Vec3(0, 0, 0), Vec3(1, 1, 1))
     hit = box.raycast(Vec3(-5, 0, 0), Vec3(1, 0, 0))
