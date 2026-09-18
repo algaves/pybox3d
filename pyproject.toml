@@ -9,7 +9,7 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = []
-license = "LGPL-2.1-or-later"
+license = "0BSD"
 license-files = ["LICENSE.md"]
 keywords = ["physics", "3d", "collision", "rigid-body", "box", "cpython-c-api"]
 classifiers = [

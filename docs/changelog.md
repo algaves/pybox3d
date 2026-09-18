@@ -152,6 +152,13 @@ See [Roadmap](roadmap.md) for what's still missing.
 
 ### Changed
 
+- License migrated from LGPL-2.1-or-later to the BSD Zero Clause
+  License (0BSD) (`pyproject.toml` `license` field, README badge and
+  license section; `LICENSE.md` already carried the 0BSD text). This is
+  a deliberate choice to keep the code free and permissive without
+  limitations: anyone may use, copy, modify, and distribute it for any
+  purpose, with or without fee, under no obligations, with the author
+  disclaiming all liability.
 - Version bumped to `2026a2` for the second PyPI release (tagged
   `v2026a2`).
 - Version bumped to `2026a1` for the first PyPI release (tagged

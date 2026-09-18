@@ -6,7 +6,7 @@
 ![Python - Implementation](https://img.shields.io/pypi/implementation/pybox3d?style=flat-square)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/pybox3d?style=flat-square)
 ![Docs](https://img.shields.io/badge/docs-mkdocs-blue?style=flat-square)
-![License](https://img.shields.io/badge/license-LGPL--2.1-green?style=flat-square)
+![License](https://img.shields.io/badge/license-0BSD-green?style=flat-square)
 
 
 Python bindings, written directly against the **CPython C API** (no
@@ -296,7 +296,7 @@ These are deliberate scope cuts for a "basic" first version, not bugs:
 
 ## License
 
-This project is licensed under the GNU Lesser General Public License v2.1 - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the BSD Zero Clause License (0BSD) - see the [LICENSE](LICENSE.md) file for details.
 
 ---
 Copyright (C) 2026 [Algaves](https://github.com/algaves).
