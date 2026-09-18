@@ -166,6 +166,8 @@ See [TODO.md](TODO.md) for what's still missing.
 
 ### Changed
 
+- Version bumped to `2026a2` for the second PyPI release (tagged
+  `v2026a2`).
 - Version bumped to `2026a1` for the first PyPI release (tagged
   `v2026a1`).
 - Release workflow (`.github/workflows/publish.yml`) now builds a
