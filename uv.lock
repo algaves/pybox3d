@@ -761,7 +761,7 @@ wheels = [
 
 [[package]]
 name = "pybox3d"
-version = "2026a0"
+version = "2026a1"
 source = { editable = "." }
 
 [package.dev-dependencies]
