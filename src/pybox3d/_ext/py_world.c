@@ -125,6 +125,7 @@ static int world_set_sleep_linear_threshold(PyWorldObject *self, PyObject *value
     }
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "sleep_linear_threshold") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "sleep_linear_threshold must be >= 0");
         return -1;
@@ -145,6 +146,7 @@ static int world_set_sleep_angular_threshold(PyWorldObject *self, PyObject *valu
     }
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "sleep_angular_threshold") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "sleep_angular_threshold must be >= 0");
         return -1;
@@ -165,6 +167,7 @@ static int world_set_sleep_time_threshold(PyWorldObject *self, PyObject *value, 
     }
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "sleep_time_threshold") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "sleep_time_threshold must be >= 0");
         return -1;
@@ -359,6 +362,7 @@ static PyObject *world_add_joint(PyWorldObject *self, PyObject *args, PyObject *
     } else {
         double v = PyFloat_AsDouble(rest_length_obj);
         if (v == -1.0 && PyErr_Occurred()) return NULL;
+        if (pybox3d_require_finite(v, "rest_length") < 0) return NULL;
         if (v < 0.0) {
             PyErr_SetString(PyExc_ValueError, "rest_length must be >= 0");
             return NULL;
@@ -371,6 +375,7 @@ static PyObject *world_add_joint(PyWorldObject *self, PyObject *args, PyObject *
     if (min_length_obj != Py_None) {
         min_length = PyFloat_AsDouble(min_length_obj);
         if (min_length == -1.0 && PyErr_Occurred()) return NULL;
+        if (pybox3d_require_finite(min_length, "min_length") < 0) return NULL;
         if (min_length < 0.0) {
             PyErr_SetString(PyExc_ValueError, "min_length must be >= 0");
             return NULL;
@@ -380,6 +385,7 @@ static PyObject *world_add_joint(PyWorldObject *self, PyObject *args, PyObject *
     if (max_length_obj != Py_None) {
         max_length = PyFloat_AsDouble(max_length_obj);
         if (max_length == -1.0 && PyErr_Occurred()) return NULL;
+        if (pybox3d_require_finite(max_length, "max_length") < 0) return NULL;
     } else if (min_length_obj != Py_None) {
         max_length = min_length > (double)rest_length ? min_length : (double)rest_length;
     }
@@ -387,10 +393,12 @@ static PyObject *world_add_joint(PyWorldObject *self, PyObject *args, PyObject *
         PyErr_SetString(PyExc_ValueError, "max_length must be >= min_length");
         return NULL;
     }
+    if (pybox3d_require_finite(stiffness, "stiffness") < 0) return NULL;
     if (stiffness < 0.0) {
         PyErr_SetString(PyExc_ValueError, "stiffness must be >= 0");
         return NULL;
     }
+    if (pybox3d_require_finite(damping, "damping") < 0) return NULL;
     if (damping < 0.0) {
         PyErr_SetString(PyExc_ValueError, "damping must be >= 0");
         return NULL;
@@ -490,6 +498,8 @@ static PyObject *world_add_revolute_joint(PyWorldObject *self, PyObject *args, P
     if (parse_anchor_kwargs(anchor_a_obj, anchor_b_obj, &anchor_a, &anchor_b) < 0) {
         return NULL;
     }
+    if (pybox3d_require_finite(motor_speed, "motor_speed") < 0) return NULL;
+    if (pybox3d_require_finite(max_motor_effort, "max_motor_effort") < 0) return NULL;
     if (max_motor_effort < 0.0) {
         PyErr_SetString(PyExc_ValueError, "max_motor_effort must be >= 0");
         return NULL;
@@ -546,16 +556,20 @@ static PyObject *world_add_prismatic_joint(PyWorldObject *self, PyObject *args, 
     if (min_translation_obj != Py_None) {
         min_translation = PyFloat_AsDouble(min_translation_obj);
         if (min_translation == -1.0 && PyErr_Occurred()) return NULL;
+        if (pybox3d_require_finite(min_translation, "min_translation") < 0) return NULL;
     }
     double max_translation = 0.0;
     if (max_translation_obj != Py_None) {
         max_translation = PyFloat_AsDouble(max_translation_obj);
         if (max_translation == -1.0 && PyErr_Occurred()) return NULL;
+        if (pybox3d_require_finite(max_translation, "max_translation") < 0) return NULL;
     }
     if (has_limits && max_translation < min_translation) {
         PyErr_SetString(PyExc_ValueError, "max_translation must be >= min_translation");
         return NULL;
     }
+    if (pybox3d_require_finite(motor_speed, "motor_speed") < 0) return NULL;
+    if (pybox3d_require_finite(max_motor_effort, "max_motor_effort") < 0) return NULL;
     if (max_motor_effort < 0.0) {
         PyErr_SetString(PyExc_ValueError, "max_motor_effort must be >= 0");
         return NULL;
@@ -638,6 +652,12 @@ static PyObject *world_add_motor_joint(PyWorldObject *self, PyObject *args, PyOb
     if (linear_offset_obj != Py_None && PyVec3_Parse(linear_offset_obj, &linear_offset) < 0) return NULL;
     b3_Quat angular_offset = b3_quat_identity();
     if (angular_offset_obj != Py_None && PyQuat_Parse(angular_offset_obj, &angular_offset) < 0) return NULL;
+    if (pybox3d_require_finite(linear_stiffness, "linear_stiffness") < 0 ||
+        pybox3d_require_finite(linear_damping, "linear_damping") < 0 ||
+        pybox3d_require_finite(angular_stiffness, "angular_stiffness") < 0 ||
+        pybox3d_require_finite(angular_damping, "angular_damping") < 0) {
+        return NULL;
+    }
     if (linear_stiffness < 0.0 || linear_damping < 0.0 || angular_stiffness < 0.0 || angular_damping < 0.0) {
         PyErr_SetString(PyExc_ValueError, "stiffness/damping values must be >= 0");
         return NULL;
@@ -695,14 +715,20 @@ static PyObject *world_add_wheel_joint(PyWorldObject *self, PyObject *args, PyOb
     if (min_translation_obj != Py_None) {
         min_translation = PyFloat_AsDouble(min_translation_obj);
         if (min_translation == -1.0 && PyErr_Occurred()) return NULL;
+        if (pybox3d_require_finite(min_translation, "min_translation") < 0) return NULL;
     }
     double max_translation = 0.0;
     if (max_translation_obj != Py_None) {
         max_translation = PyFloat_AsDouble(max_translation_obj);
         if (max_translation == -1.0 && PyErr_Occurred()) return NULL;
+        if (pybox3d_require_finite(max_translation, "max_translation") < 0) return NULL;
     }
     if (has_limits && max_translation < min_translation) {
         PyErr_SetString(PyExc_ValueError, "max_translation must be >= min_translation");
+        return NULL;
+    }
+    if (pybox3d_require_finite(suspension_stiffness, "suspension_stiffness") < 0 ||
+        pybox3d_require_finite(suspension_damping, "suspension_damping") < 0) {
         return NULL;
     }
     if (suspension_stiffness < 0.0 || suspension_damping < 0.0) {
@@ -989,6 +1015,9 @@ static PyObject *world_debug_joint_anchors(PyWorldObject *self, PyObject *Py_UNU
 static PyObject *world_step(PyWorldObject *self, PyObject *arg) {
     double dt = PyFloat_AsDouble(arg);
     if (dt == -1.0 && PyErr_Occurred()) {
+        return NULL;
+    }
+    if (pybox3d_require_finite(dt, "dt") < 0) {
         return NULL;
     }
     b3_world_step(&self->world, (b3_real)dt);

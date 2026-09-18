@@ -1,4 +1,5 @@
 #include "py_vec3.h"
+#include "py_errors.h"
 
 #include "structmember.h"
 
@@ -14,6 +15,9 @@ PyObject *PyVec3_FromVec3(b3_Vec3 v) {
 static int parse_number(PyObject *obj, b3_real *out) {
     double d = PyFloat_AsDouble(obj);
     if (d == -1.0 && PyErr_Occurred()) {
+        return -1;
+    }
+    if (pybox3d_require_finite(d, "each Vec3 component") < 0) {
         return -1;
     }
     *out = (b3_real)d;
@@ -53,6 +57,10 @@ static PyObject *vec3_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     static char *kwlist[] = {"x", "y", "z", NULL};
     double x = 0.0, y = 0.0, z = 0.0;
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "|ddd", kwlist, &x, &y, &z)) {
+        return NULL;
+    }
+    if (pybox3d_require_finite(x, "x") < 0 || pybox3d_require_finite(y, "y") < 0 ||
+        pybox3d_require_finite(z, "z") < 0) {
         return NULL;
     }
     PyVec3Object *self = (PyVec3Object *)type->tp_alloc(type, 0);

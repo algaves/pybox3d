@@ -18,4 +18,13 @@ int pybox3d_errors_init(PyObject *module);
  * propagate a -1 result as their own failure (e.g. `return NULL;`). */
 int pybox3d_status_to_exception(b3_Status status, const char *context);
 
+/* Rejects a non-finite (NaN/inf) scalar with a ValueError naming `what`
+ * (e.g. "mass", "rest_length"). Returns 0 (no exception set) if `v` is
+ * finite, -1 (ValueError set) otherwise -- same calling convention as
+ * PyVec3_Parse/PyQuat_Parse. For bare-scalar setters/constructors that
+ * don't go through those (RigidBody.mass, DistanceJoint.rest_length,
+ * etc.); PyVec3_Parse/PyQuat_Parse do their own equivalent check inline
+ * since they already loop over components. */
+int pybox3d_require_finite(double v, const char *what);
+
 #endif /* PYBOX3D_PY_ERRORS_H */

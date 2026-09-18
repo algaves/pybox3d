@@ -1,5 +1,6 @@
 #include "py_quat.h"
 #include "py_vec3.h"
+#include "py_errors.h"
 
 #include <math.h>
 
@@ -15,6 +16,9 @@ PyObject *PyQuat_FromQuat(b3_Quat q) {
 static int parse_number(PyObject *obj, b3_real *out) {
     double d = PyFloat_AsDouble(obj);
     if (d == -1.0 && PyErr_Occurred()) {
+        return -1;
+    }
+    if (pybox3d_require_finite(d, "each Quat component") < 0) {
         return -1;
     }
     *out = (b3_real)d;
@@ -53,6 +57,10 @@ static PyObject *quat_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     static char *kwlist[] = {"x", "y", "z", "w", NULL};
     double x = 0.0, y = 0.0, z = 0.0, w = 1.0;
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "|dddd", kwlist, &x, &y, &z, &w)) {
+        return NULL;
+    }
+    if (pybox3d_require_finite(x, "x") < 0 || pybox3d_require_finite(y, "y") < 0 ||
+        pybox3d_require_finite(z, "z") < 0 || pybox3d_require_finite(w, "w") < 0) {
         return NULL;
     }
     PyQuatObject *self = (PyQuatObject *)type->tp_alloc(type, 0);

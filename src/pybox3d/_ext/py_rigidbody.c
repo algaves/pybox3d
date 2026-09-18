@@ -4,6 +4,7 @@
 #include "py_quat.h"
 #include "py_box3d.h"
 #include "py_shape.h"
+#include "py_errors.h"
 #include "box3d/debugdraw.h"
 
 #include <stdlib.h>
@@ -63,6 +64,9 @@ static PyObject *rigidbody_new(PyTypeObject *type, PyObject *args, PyObject *kwd
         )) {
         return NULL;
     }
+    if (pybox3d_require_finite(mass, "mass") < 0) {
+        return NULL;
+    }
     b3_Vec3 position, half_extents;
     if (PyVec3_Parse(position_obj, &position) < 0) {
         return NULL;
@@ -92,6 +96,9 @@ static PyObject *rigidbody_sphere(PyTypeObject *type, PyObject *args, PyObject *
         )) {
         return NULL;
     }
+    if (pybox3d_require_finite(radius, "radius") < 0 || pybox3d_require_finite(mass, "mass") < 0) {
+        return NULL;
+    }
     b3_Vec3 position;
     if (PyVec3_Parse(position_obj, &position) < 0) {
         return NULL;
@@ -118,6 +125,11 @@ static PyObject *rigidbody_capsule(PyTypeObject *type, PyObject *args, PyObject 
         )) {
         return NULL;
     }
+    if (pybox3d_require_finite(radius, "radius") < 0 ||
+        pybox3d_require_finite(half_height, "half_height") < 0 ||
+        pybox3d_require_finite(mass, "mass") < 0) {
+        return NULL;
+    }
     b3_Vec3 position;
     if (PyVec3_Parse(position_obj, &position) < 0) {
         return NULL;
@@ -141,6 +153,9 @@ static PyObject *rigidbody_hull(PyTypeObject *type, PyObject *args, PyObject *kw
     if (!PyArg_ParseTupleAndKeywords(
             args, kwds, "OO|d", kwlist, &position_obj, &vertices_obj, &mass
         )) {
+        return NULL;
+    }
+    if (pybox3d_require_finite(mass, "mass") < 0) {
         return NULL;
     }
     b3_Vec3 position;
@@ -187,6 +202,9 @@ static PyObject *rigidbody_compound(PyTypeObject *type, PyObject *args, PyObject
     if (!PyArg_ParseTupleAndKeywords(
             args, kwds, "OO|d", kwlist, &position_obj, &children_obj, &mass
         )) {
+        return NULL;
+    }
+    if (pybox3d_require_finite(mass, "mass") < 0) {
         return NULL;
     }
     b3_Vec3 position;
@@ -278,6 +296,9 @@ static PyObject *rigidbody_heightfield(PyTypeObject *type, PyObject *args, PyObj
         )) {
         return NULL;
     }
+    if (pybox3d_require_finite(cell_size, "cell_size") < 0) {
+        return NULL;
+    }
     b3_Vec3 position;
     if (PyVec3_Parse(position_obj, &position) < 0) {
         return NULL;
@@ -326,6 +347,11 @@ static PyObject *rigidbody_heightfield(PyTypeObject *type, PyObject *args, PyObj
         for (Py_ssize_t c = 0; c < cols; c++) {
             double v = PyFloat_AsDouble(PySequence_Fast_GET_ITEM(row_seq, c));
             if (v == -1.0 && PyErr_Occurred()) {
+                Py_DECREF(row_seq);
+                Py_DECREF(rows_seq);
+                return NULL;
+            }
+            if (pybox3d_require_finite(v, "each height") < 0) {
                 Py_DECREF(row_seq);
                 Py_DECREF(rows_seq);
                 return NULL;
@@ -464,6 +490,7 @@ static int rigidbody_set_mass(PyRigidBodyObject *self, PyObject *value, void *cl
     if (body == NULL) return -1;
     double mass = PyFloat_AsDouble(value);
     if (mass == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(mass, "mass") < 0) return -1;
     if (mass < 0.0) {
         PyErr_SetString(PyExc_ValueError, "mass must be >= 0 (0 means static)");
         return -1;
@@ -502,6 +529,7 @@ static int rigidbody_set_restitution(PyRigidBodyObject *self, PyObject *value, v
     if (body == NULL) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "restitution") < 0) return -1;
     body->restitution = (b3_real)v;
     return 0;
 }
@@ -522,6 +550,7 @@ static int rigidbody_set_friction(PyRigidBodyObject *self, PyObject *value, void
     if (body == NULL) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "friction") < 0) return -1;
     body->friction = (b3_real)v;
     return 0;
 }
