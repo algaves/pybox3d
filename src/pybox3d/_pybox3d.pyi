@@ -8,7 +8,10 @@ C-API surface (src/pybox3d/_ext/*.c) changes.
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import NamedTuple, Union
+from typing import Any, NamedTuple, Union
+
+import numpy as np
+import numpy.typing as npt
 
 __version__: str
 
@@ -20,8 +23,8 @@ MESH_MAX_TRIANGLES: int
 HEIGHTFIELD_MAX_ROWS: int
 HEIGHTFIELD_MAX_COLS: int
 
-VecLike = Union["Vec3", Sequence[float]]
-QuatLike = Union["Quat", Sequence[float]]
+VecLike = Union["Vec3", Sequence[float], "npt.NDArray[np.floating[Any]]"]
+QuatLike = Union["Quat", Sequence[float], "npt.NDArray[np.floating[Any]]"]
 
 class Box3DError(RuntimeError): ...
 class CapacityError(Box3DError): ...
@@ -45,6 +48,9 @@ class Vec3:
     def length_squared(self) -> float: ...
     def normalized(self) -> Vec3: ...
     def to_tuple(self) -> tuple[float, float, float]: ...
+    def to_numpy(self) -> npt.NDArray[np.float32]: ...
+    @classmethod
+    def from_numpy(cls, arr: npt.ArrayLike) -> Vec3: ...
 
 class Quat:
     x: float
@@ -61,6 +67,9 @@ class Quat:
     def conjugate(self) -> Quat: ...
     def rotate_vec3(self, v: VecLike) -> Vec3: ...
     def to_mat3(self) -> tuple[float, ...]: ...
+    def to_numpy(self) -> npt.NDArray[np.float32]: ...
+    @classmethod
+    def from_numpy(cls, arr: npt.ArrayLike) -> Quat: ...
 
 class ContactInfo(NamedTuple):
     normal: Vec3

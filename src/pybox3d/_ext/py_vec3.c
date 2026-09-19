@@ -238,6 +238,25 @@ static PyObject *vec3_to_tuple(PyVec3Object *self, PyObject *Py_UNUSED(ignored))
     return Py_BuildValue("(ddd)", (double)self->value.x, (double)self->value.y, (double)self->value.z);
 }
 
+static PyObject *vec3_to_numpy(PyVec3Object *self, PyObject *Py_UNUSED(ignored)) {
+    PyObject *numpy = PyImport_ImportModule("numpy");
+    if (numpy == NULL) {
+        return NULL;
+    }
+    PyObject *result = PyObject_CallMethod(numpy, "array", "Os", (PyObject *)self, "float32");
+    Py_DECREF(numpy);
+    return result;
+}
+
+static PyObject *vec3_from_numpy(PyTypeObject *cls, PyObject *arr) {
+    (void)cls;
+    b3_Vec3 v;
+    if (PyVec3_Parse(arr, &v) < 0) {
+        return NULL;
+    }
+    return PyVec3_FromVec3(v);
+}
+
 static PyMethodDef vec3_methods[] = {
     {"dot", (PyCFunction)vec3_dot, METH_O, "dot(other) -> float"},
     {"cross", (PyCFunction)vec3_cross, METH_O, "cross(other) -> Vec3"},
@@ -245,7 +264,45 @@ static PyMethodDef vec3_methods[] = {
     {"length_squared", (PyCFunction)vec3_length_sq, METH_NOARGS, "length_squared() -> float"},
     {"normalized", (PyCFunction)vec3_normalized, METH_NOARGS, "normalized() -> Vec3"},
     {"to_tuple", (PyCFunction)vec3_to_tuple, METH_NOARGS, "to_tuple() -> tuple[float, float, float]"},
+    {"to_numpy", (PyCFunction)vec3_to_numpy, METH_NOARGS,
+     "to_numpy() -> numpy.ndarray[float32] of shape (3,)"},
+    {"from_numpy", (PyCFunction)vec3_from_numpy, METH_O | METH_CLASS, "from_numpy(arr) -> Vec3"},
     {NULL},
+};
+
+/* --- buffer protocol ---
+ *
+ * Read-only: Vec3.x/.y/.z are settable and route through
+ * pybox3d_require_finite. A writable buffer would let numpy write raw
+ * floats straight into `value`, bypassing that guard. */
+
+static const Py_ssize_t vec3_buffer_shape[1] = {3};
+static const Py_ssize_t vec3_buffer_strides[1] = {sizeof(b3_real)};
+
+static int vec3_getbuffer(PyVec3Object *self, Py_buffer *view, int flags) {
+    if (flags & PyBUF_WRITABLE) {
+        PyErr_SetString(PyExc_BufferError, "Vec3 buffer is read-only");
+        view->obj = NULL;
+        return -1;
+    }
+    view->obj = (PyObject *)self;
+    view->buf = &self->value;
+    view->len = (Py_ssize_t)sizeof(b3_real) * 3;
+    view->readonly = 1;
+    view->itemsize = sizeof(b3_real);
+    view->format = (flags & PyBUF_FORMAT) ? "f" : NULL;
+    view->ndim = 1;
+    view->shape = (flags & PyBUF_ND) ? (Py_ssize_t *)vec3_buffer_shape : NULL;
+    view->strides = (flags & PyBUF_STRIDES) ? (Py_ssize_t *)vec3_buffer_strides : NULL;
+    view->suboffsets = NULL;
+    view->internal = NULL;
+    Py_INCREF(self);
+    return 0;
+}
+
+static PyBufferProcs vec3_as_buffer = {
+    .bf_getbuffer = (getbufferproc)vec3_getbuffer,
+    .bf_releasebuffer = NULL,
 };
 
 PyTypeObject PyVec3_Type = {
@@ -260,6 +317,7 @@ PyTypeObject PyVec3_Type = {
     .tp_hash = (hashfunc)vec3_hash,
     .tp_richcompare = vec3_richcompare,
     .tp_as_number = &vec3_as_number,
+    .tp_as_buffer = &vec3_as_buffer,
     .tp_getset = vec3_getset,
     .tp_methods = vec3_methods,
 };

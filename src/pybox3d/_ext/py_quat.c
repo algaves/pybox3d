@@ -200,6 +200,25 @@ static PyObject *quat_to_mat3(PyQuatObject *self, PyObject *Py_UNUSED(ignored)) 
     return result;
 }
 
+static PyObject *quat_to_numpy(PyQuatObject *self, PyObject *Py_UNUSED(ignored)) {
+    PyObject *numpy = PyImport_ImportModule("numpy");
+    if (numpy == NULL) {
+        return NULL;
+    }
+    PyObject *result = PyObject_CallMethod(numpy, "array", "Os", (PyObject *)self, "float32");
+    Py_DECREF(numpy);
+    return result;
+}
+
+static PyObject *quat_from_numpy(PyTypeObject *cls, PyObject *arr) {
+    (void)cls;
+    b3_Quat q;
+    if (PyQuat_Parse(arr, &q) < 0) {
+        return NULL;
+    }
+    return PyQuat_FromQuat(q);
+}
+
 static PyMethodDef quat_methods[] = {
     {"from_axis_angle", (PyCFunction)quat_from_axis_angle, METH_VARARGS | METH_CLASS,
      "from_axis_angle(axis, angle_radians) -> Quat"},
@@ -208,7 +227,41 @@ static PyMethodDef quat_methods[] = {
     {"rotate_vec3", (PyCFunction)quat_rotate_vec3, METH_O, "rotate_vec3(v) -> Vec3"},
     {"to_mat3", (PyCFunction)quat_to_mat3, METH_NOARGS,
      "to_mat3() -> tuple[float, ...] (row-major 3x3 rotation matrix, 9 elements)"},
+    {"to_numpy", (PyCFunction)quat_to_numpy, METH_NOARGS,
+     "to_numpy() -> numpy.ndarray[float32] of shape (4,), (x, y, z, w)"},
+    {"from_numpy", (PyCFunction)quat_from_numpy, METH_O | METH_CLASS, "from_numpy(arr) -> Quat"},
     {NULL},
+};
+
+/* --- buffer protocol --- (see py_vec3.c: same read-only rationale) */
+
+static const Py_ssize_t quat_buffer_shape[1] = {4};
+static const Py_ssize_t quat_buffer_strides[1] = {sizeof(b3_real)};
+
+static int quat_getbuffer(PyQuatObject *self, Py_buffer *view, int flags) {
+    if (flags & PyBUF_WRITABLE) {
+        PyErr_SetString(PyExc_BufferError, "Quat buffer is read-only");
+        view->obj = NULL;
+        return -1;
+    }
+    view->obj = (PyObject *)self;
+    view->buf = &self->value;
+    view->len = (Py_ssize_t)sizeof(b3_real) * 4;
+    view->readonly = 1;
+    view->itemsize = sizeof(b3_real);
+    view->format = (flags & PyBUF_FORMAT) ? "f" : NULL;
+    view->ndim = 1;
+    view->shape = (flags & PyBUF_ND) ? (Py_ssize_t *)quat_buffer_shape : NULL;
+    view->strides = (flags & PyBUF_STRIDES) ? (Py_ssize_t *)quat_buffer_strides : NULL;
+    view->suboffsets = NULL;
+    view->internal = NULL;
+    Py_INCREF(self);
+    return 0;
+}
+
+static PyBufferProcs quat_as_buffer = {
+    .bf_getbuffer = (getbufferproc)quat_getbuffer,
+    .bf_releasebuffer = NULL,
 };
 
 PyTypeObject PyQuat_Type = {
@@ -222,6 +275,7 @@ PyTypeObject PyQuat_Type = {
     .tp_repr = (reprfunc)quat_repr,
     .tp_richcompare = quat_richcompare,
     .tp_as_number = &quat_as_number,
+    .tp_as_buffer = &quat_as_buffer,
     .tp_getset = quat_getset,
     .tp_methods = quat_methods,
 };
