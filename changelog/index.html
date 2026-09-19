@@ -1,0 +1,2903 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python bindings (CPython C-API) for libbox3d, a 3D box geometry + rigid-body physics library">
+      
+      
+      
+      
+        <link rel="prev" href="../roadmap/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Changelog - pybox3d</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#changelog" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="pybox3d" class="md-header__button md-logo" aria-label="pybox3d" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15 6.04 7.5 12 10.85l5.96-3.35z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pybox3d
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Changelog
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/algaves/pybox3d" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="pybox3d" class="md-nav__button md-logo" aria-label="pybox3d" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15 6.04 7.5 12 10.85l5.96-3.35z"/></svg>
+
+    </a>
+    pybox3d
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/algaves/pybox3d" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88zM12 4.15 6.04 7.5 12 10.85l5.96-3.35z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/numpy-interop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NumPy interop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/falling-box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dropping a box
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/pendulum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A swinging pendulum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/joint-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A joint chain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/dumbbell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A drifting dumbbell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/joint-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A simple robot arm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/character-mover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A CharacterMover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/debug-draw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Debug Draw
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Examples
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/falling-box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Falling box
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/pendulum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pendulum joint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/joint-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joint chain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/dumbbell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dumbbell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/joint-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joint types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/character-mover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Character mover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/debug-draw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Debug draw
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/modules/pybox3d/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pybox3d
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Classes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/vec3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vec3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/quat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/box3d/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Box3D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/sphere/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sphere
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/capsule/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capsule
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/convexhull/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ConvexHull
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/compound/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compound
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/trianglemesh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TriangleMesh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/heightfield/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HeightField
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/rigidbody/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RigidBody
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/distancejoint/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DistanceJoint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/joint/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/world/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    World
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/worldsnapshot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WorldSnapshot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/charactermover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CharacterMover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/contactinfo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ContactInfo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/classes/rayhit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RayHit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Functions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/vec3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vec3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/quat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/box3d/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Box3D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/sphere/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sphere
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/capsule/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capsule
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/convexhull/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ConvexHull
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/compound/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compound
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/trianglemesh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TriangleMesh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/heightfield/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HeightField
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/rigidbody/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RigidBody
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/distancejoint/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DistanceJoint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/joint/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/world/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    World
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/worldsnapshot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WorldSnapshot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/functions/charactermover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CharacterMover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unreleased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [Unreleased]
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026b0-2026-09-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2026b0] - 2026-09-19
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2026b0] - 2026-09-19">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documented
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initial-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unreleased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [Unreleased]
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026b0-2026-09-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2026b0] - 2026-09-19
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2026b0] - 2026-09-19">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documented
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initial-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="changelog">Changelog</h1>
+<p>Mirrors
+<a href="https://github.com/algaves/pybox3d/blob/main/CHANGELOG.md"><code>CHANGELOG.md</code></a>
+at the repo root -- keep both in sync when either changes.</p>
+<p>All notable changes to <code>pybox3d</code> are documented here. Loosely follows
+<a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>. See
+<a href="../roadmap/">Roadmap</a> for what's still missing.</p>
+<h2 id="unreleased">[Unreleased]</h2>
+<h2 id="2026b0-2026-09-19">[2026b0] - 2026-09-19</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>NumPy interop: <a href="../reference/classes/vec3/"><code>Vec3</code></a> and
+  <a href="../reference/classes/quat/"><code>Quat</code></a> gained <code>to_numpy()</code>/<code>from_numpy()</code>
+  and a read-only buffer protocol (zero-copy <code>np.asarray()</code>), and
+  <code>VecLike</code>/<code>QuatLike</code> now formally include NumPy arrays. NumPy (<code>&gt;=1.24</code>)
+  is now a runtime dependency. See <a href="../getting-started/numpy-interop/">NumPy interop</a>.</li>
+<li>Precompiled wheels: extended the <code>manylinux</code> matrix with ARMv7
+  (<code>armv7l</code>), PPC64LE (<code>ppc64le</code>), and RISC-V (<code>riscv64</code>); added
+  <code>musllinux</code> wheels (x86_64, ARM64, ARMv7, PPC64LE); added a
+  cross-compiled, build-only Windows ARM64 (<code>win_arm64</code>) wheel. ARMv6 and
+  BSD remain source-install-only -- no platform tag exists for them. See
+  <a href="../getting-started/install/">Installation</a> for the full matrix.</li>
+<li>Utilities: <a href="../reference/classes/charactermover/">CharacterMover</a> (a
+  kinematic move-and-slide character controller -- construct with a
+  position and any of the seven shape types, then call <code>.move(world,
+  displacement)</code> each step to move it and resolve collisions against
+  <code>world</code>'s bodies via discrete push-out + slide; not a <code>RigidBody</code>,
+  never added to a <code>World</code>, so gravity/input are entirely up to the
+  caller) and Debug Draw (<code>RigidBody.debug_lines()</code> -- a wireframe
+  approximation of a body's current shape; <code>World.debug_contacts()</code>/
+  <code>.debug_joint_anchors()</code> -- pure data, no rendering backend of any
+  kind, by design). This closes the last two items on
+  <a href="../roadmap/">Roadmap</a> -- every roadmap item is now checked off.</li>
+<li>World/Simulation systems: <a href="../reference/functions/world/"><code>World.query_aabb()</code>/<code>.raycast_all()</code></a>
+  (AABB and ray queries over every body); <code>World.contacts_began</code>/
+  <code>.contacts_ended</code> (this step's newly-formed/newly-separated contact
+  pairs, polled after <code>World.step()</code> rather than a registered callback
+  -- see <a href="../limitations/">Known limitations</a> for why); per-body sleeping
+  (<code>World.sleeping_enabled</code> and its <code>sleep_linear_threshold</code>/
+  <code>sleep_angular_threshold</code>/<code>sleep_time_threshold</code> knobs,
+  <code>RigidBody.is_sleeping</code>/<code>.wake()</code> -- a sleeping body's integration is
+  skipped until a joint/contact impulse or an explicit <code>wake()</code>/attribute
+  write gives it an above-threshold velocity again); and
+  <code>World.snapshot()</code>/<code>.restore()</code> (a new
+  <a href="../reference/classes/worldsnapshot/">WorldSnapshot</a> type) for simple
+  state recording/replay. The narrow phase's broad-phase pass is now a
+  sort-and-sweep (bodies' AABBs sorted and swept along X) instead of the
+  original naive O(n²) body-pair scan -- not the dynamic BVH tree
+  originally planned; see <a href="../limitations/">Known limitations</a> for why a
+  simpler algorithm was chosen. Also skips any pair where both bodies
+  are static/asleep.</li>
+<li>Eight new joint kinds beyond <code>DistanceJoint</code>, all under a single new
+  <a href="../reference/classes/joint/">Joint</a> class -- <code>World.add_spherical_joint()</code>
+  (ball-and-socket point constraint, free rotation), <code>add_revolute_joint()</code>
+  (a hinge: point constraint plus a lock on every rotation axis except
+  the given one, with an optional torque motor), <code>add_prismatic_joint()</code>
+  (a slider: locks everything but translation along an axis, with
+  optional limits and a force motor), <code>add_weld_joint()</code> (full 6-DOF
+  rigid lock), <code>add_motor_joint()</code> (soft, spring-driven -- decoupled
+  linear/angular springs toward a target pose, not a hard constraint),
+  <code>add_wheel_joint()</code> (a Prismatic-style suspension axis combined with
+  free rotation around a separate axle axis), <code>add_filter_joint()</code> (not
+  a real constraint -- disables collision between the named pair), and
+  <code>add_parallel_joint()</code> (angular-only Weld: orientation locked,
+  translation free). <code>Joint.kind</code> says which one a handle is; only the
+  attributes that kind actually uses are settable, others raise
+  <code>AttributeError</code>. See <a href="../limitations/">Known limitations</a> for each new
+  kind's v1 scope cuts.</li>
+<li><a href="../reference/classes/distancejoint/">DistanceJoint</a> per-body local
+  anchors (<code>anchor_a</code>/<code>anchor_b</code>), distance limits (<code>min_length</code>/
+  <code>max_length</code>/<code>has_limits</code>), and spring softness/damping (<code>stiffness</code>/
+  <code>damping</code>), settable via <code>World.add_joint()</code>'s new keyword arguments
+  or directly on the returned handle. The joint's velocity-phase
+  constraint impulse is now applied at the actual world-space anchor
+  points, so it torques each body when an anchor isn't at the body's
+  center -- closing the "linear-only, center-only" v1 gap for joints.
+  Positional-drift cleanup still only translates each body's center, a
+  documented v1 simplification -- see <a href="../limitations/">Known limitations</a>.</li>
+<li><code>World.solver_iterations</code> (default 4): distance joints and contacts
+  now resolve their velocity constraint that many times per step over
+  the same detected set, and joints additionally run that many
+  positional passes. This substantially reduces (but doesn't eliminate)
+  the documented joint-chain-sag limitation: an 8-link chain that
+  stretched to ~215% of its total <code>rest_length</code> at a single iteration
+  settles to ~108% at the new default of 4.</li>
+<li>Per-body contact materials: <code>World.step</code> now combines each contact
+  pair's own <a href="../reference/classes/rigidbody/"><code>RigidBody</code></a>
+  <code>restitution</code>/<code>friction</code> (max and geometric mean respectively) instead
+  of a world-global default. <code>World.default_restitution</code>/
+  <code>.default_friction</code> are removed (superseded).</li>
+<li>Full 6-DOF friction impulses: a sliding body now correctly picks up
+  rolling spin from contact friction (previously linear-only). The
+  separating/restitution impulse stays linear-only -- see
+  <a href="../limitations/">Known limitations</a> for why. Restitution is also now
+  suppressed below a small closing-speed threshold (Box2D's technique)
+  to stop resting-contact noise reading as a repeated tiny bounce.</li>
+<li><a href="../reference/classes/sphere/">Sphere</a>,
+  <a href="../reference/classes/capsule/">Capsule</a>,
+  <a href="../reference/classes/convexhull/">ConvexHull</a>, and
+  <a href="../reference/classes/compound/">Compound</a> shapes, plus
+  <code>RigidBody.sphere()</code>/<code>.capsule()</code>/<code>.hull()</code>/<code>.compound()</code>
+  constructors. <code>RigidBody.shape</code> now returns whichever of the five
+  matches the body's kind. See <a href="../limitations/">Known limitations</a> for
+  <code>ConvexHull</code>/<code>Compound</code>'s v1 scope cuts (no hull construction from a
+  raw point cloud, approximate hull raycast/inertia, approximate
+  compound inertia, no nested compounds).</li>
+<li><a href="../reference/classes/trianglemesh/">TriangleMesh</a> and
+  <a href="../reference/classes/heightfield/">HeightField</a> shapes, plus
+  <code>RigidBody.mesh()</code>/<code>.heightfield()</code> constructors (both always-static --
+  no <code>mass</code> parameter, and setting <code>.mass</code> on one raises <code>ValueError</code>).
+  Collision against a convex shape is per-triangle GJK/EPA with an AABB
+  quick-reject; see <a href="../limitations/">Known limitations</a> for the v1
+  scope cuts (<code>contains_point()</code> always <code>False</code>, AABB-approximated
+  <code>raycast()</code>, fixed size caps, no mesh/height-field pair support).</li>
+<li>Exact edge-edge contact normals for box-box: the 15-axis SAT now
+  compares all 15 candidate axes (previously only the 6 face axes) to
+  find the true least-penetrating one, and when an edge-edge axis wins,
+  computes the contact point as the exact closest points between the
+  two specific box edges instead of falling back to a face-based
+  approximation.</li>
+<li>A generic GJK/EPA collision core backing every shape-pair
+  <code>overlaps()</code>/<code>World.step()</code> collision other than box-vs-box, which
+  keeps its existing exact SAT test. <code>Box3D.overlaps()</code> (and the new
+  shape types' <code>overlaps()</code>) now accept any of the seven shape types.</li>
+<li><a href="../reference/classes/contactinfo/">ContactInfo</a> gained a third field,
+  <code>point</code>: one representative world-space contact point (v1
+  simplification, not a full manifold -- see
+  <a href="../limitations/">Known limitations</a>).</li>
+<li>Stable, generation-checked ids (<code>b3_BodyId</code>/<code>b3_JointId</code>, via a new
+  <code>b3_SlotMap</code> shared by <code>b3_World</code>'s body and joint storage) backing
+  every <code>RigidBody</code>/<code>DistanceJoint</code> handle returned by <code>World.add_body</code>/
+  <code>get_body</code>/<code>add_joint</code>/<code>get_joint</code>. A handle now keeps resolving to the
+  <em>same</em> entity even if unrelated <code>remove_body</code>/<code>remove_joint</code> calls
+  relocate it via swap-remove, and reliably raises <code>ValueError</code> once the
+  entity it names has actually been removed. <code>World.remove_body</code> also
+  now removes (and invalidates the handles of) every joint that
+  referenced the removed body, instead of leaving it dangling.</li>
+<li><code>DistanceJoint</code>: a rigid center-to-center distance constraint between
+  two bodies already in a <code>World</code>, via <code>World.add_joint()</code>/<code>get_joint()</code>/
+  <code>remove_joint()</code>/<code>joint_count</code>. See <a href="../reference/classes/distancejoint/">DistanceJoint</a> and
+  the pendulum demo in <a href="../examples/">Examples</a>.</li>
+<li><a href="../roadmap/">Roadmap</a>, tracking missing features against
+  <a href="https://box2d.org/documentation3d/topics.html">https://box2d.org/documentation3d/topics.html</a>.</li>
+<li>This changelog.</li>
+<li>MkDocs documentation site (<code>docs/</code>, <code>mkdocs.yml</code>, <code>uv run mkdocs
+  serve</code>).</li>
+<li>PyPI packaging metadata (<code>classifiers</code>, <code>keywords</code>, <code>project.urls</code>,
+  <code>license</code>/<code>license-files</code>) and a GitHub Actions release workflow
+  (<code>../.github/workflows/publish.yml</code>).</li>
+<li><code>LICENSE.md</code> (LGPL-2.1-or-later).</li>
+<li>README: Installation (<code>pip install</code>), Usage, Documentation, and
+  Publishing sections.</li>
+<li><code>examples/joint_chain_demo.py</code> (a short chain of <code>DistanceJoint</code>s
+  hanging from a static anchor) and <code>examples/dumbbell_demo.py</code> (two
+  free dynamic bodies joined by a <code>DistanceJoint</code>, no static anchor) --
+  see <a href="../examples/">Examples</a>.</li>
+<li>This Roadmap and Changelog, published as pages in the docs site
+  (mirroring <code>TODO.md</code>/<code>CHANGELOG.md</code> at the repo root).</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>License migrated from LGPL-2.1-or-later to the BSD Zero Clause
+  License (0BSD) (<code>pyproject.toml</code> <code>license</code> field, README badge and
+  license section; <code>LICENSE.md</code> already carried the 0BSD text). This is
+  a deliberate choice to keep the code free and permissive without
+  limitations: anyone may use, copy, modify, and distribute it for any
+  purpose, with or without fee, under no obligations, with the author
+  disclaiming all liability.</li>
+<li>Version bumped to <code>2026a2</code> for the second PyPI release (tagged
+  <code>v2026a2</code>).</li>
+<li>Version bumped to <code>2026a1</code> for the first PyPI release (tagged
+  <code>v2026a1</code>).</li>
+<li>Release workflow (<code>../.github/workflows/publish.yml</code>) now builds a
+  full wheel matrix with <code>cibuildwheel</code> -- Windows (x86_64), Linux
+  (x86_64 + ARM64 via QEMU, <code>manylinux</code>), and macOS (x86_64 + ARM64) for
+  Python 3.10-3.14 -- runs the test suite against every wheel, and
+  publishes to PyPI with trusted publishing. The sdist is built
+  separately and trimmed to sources only (no <code>docs/</code>, <code>tests/</code>,
+  <code>examples/</code>, <code>.github/</code>, or <code>uv.lock</code>).</li>
+<li>CI split into <code>tests.yaml</code> (cross-platform pytest matrix on every
+  push/PR) and <code>check.yaml</code> (ruff lint + mypy typecheck) workflows.</li>
+<li>Installation docs now advertise the prebuilt wheels (<a href="../getting-started/install/">Installation</a>);
+  source installs remain documented as the fallback for unsupported
+  platforms.</li>
+<li>MkDocs theme switched to
+  <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>
+  with a light blue palette (after a brief detour to the Nature theme),
+  restoring Material's visual style and enhanced search. This reverts
+  the earlier Material-to-Nature switch.</li>
+<li>Documentation site restructured into guided sections: <code>Getting
+  started</code> (install / quickstart / documentation workflow), <code>Tutorials</code>
+  (step-by-step walkthroughs of the falling box, pendulum, joint chain,
+  and dumbbell demos), <code>Examples</code> (one page per runnable demo),
+  <code>Reference</code> (module, class, and function sub-pages), and <code>Project</code>
+  (limitations / roadmap / changelog). <code>docs/api/</code> was replaced by
+  <code>docs/reference/{modules,classes,functions}/</code>, with method content
+  split across the new class/function pages and <code>ContactInfo</code>/<code>RayHit</code>
+  promoted to their own class pages.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Broad-phase sort-and-sweep pair ordering is now deterministic: equal
+  AABB <code>min_x</code> values break ties by body index. An unstable <code>qsort</code> tie
+  previously made a coincident-body prismatic-motor test fail only on
+  Windows (MSVC reorders equal elements differently than glibc/clang);
+  that test also no longer starts with the cart fully inside the rail.</li>
+<li><code>docs/getting-started.md</code> and <code>README.md</code> still referenced the
+  Nature theme/<code>mkdocs-nature</code> package after the switch back above;
+  updated both to <code>mkdocs-material</code>.</li>
+<li>The PyPI publish workflow ignores platform-tag problems: the
+  <code>pypi-publish</code> job runs on <code>workflow_dispatch</code> as well as on release
+  (both via trusted publishing on the <code>pypi</code> environment), and the README
+  documents that locally-built Linux wheels carry an unsupported
+  <code>linux_x86_64</code> tag which PyPI rejects -- repair them with
+  <code>auditwheel repair</code> or publish through the CI workflow.</li>
+<li><a href="../"><code>index.md</code></a> never mentioned <code>DistanceJoint</code> after it was
+  added.</li>
+<li>Task-list checkboxes (<code>- [x]</code>/<code>- [ ]</code>) on this page and
+  <a href="../roadmap/">Roadmap</a> rendered as literal <code>[x]</code>/<code>[ ]</code> text: the
+  Material-to-Nature theme switch dropped <code>pymdown-extensions</code> (a
+  transitive Material dependency), which <code>pymdownx.tasklist</code> needs.
+  Added it back as a direct <code>docs</code> dependency and enabled
+  <code>pymdownx.tasklist</code> in <code>mkdocs.yml</code>.</li>
+<li>The built wheel no longer bundles the C extension's <code>.c</code>/<code>.h</code> sources
+  (<code>wheel.exclude</code> in <code>pyproject.toml</code>) -- dead weight not needed at
+  runtime, left over from <code>wheel.packages</code> copying the whole
+  <code>src/pybox3d</code> tree.</li>
+<li><a href="../reference/functions/rigidbody/">RigidBody functions</a> described
+  <code>apply_impulse()</code> as accumulated and only taking effect on the next
+  <code>World.step()</code>, like <code>apply_force()</code> -- it actually changes
+  <code>linear_velocity</code>/<code>angular_velocity</code> immediately, no accumulator
+  involved.</li>
+<li><code>_pybox3d.pyi</code> still declared the removed <code>World.default_restitution</code>/
+  <code>.default_friction</code> attributes after per-body contact materials
+  dropped them from the actual extension (see Added, above) -- a real
+  stub/runtime mismatch that <code>mypy</code> couldn't catch because the stub, not
+  the compiled module, is what it type-checks against. Removed them from
+  the stub and added <code>solver_iterations</code>/the new <code>DistanceJoint</code>/
+  <code>add_joint</code> fields from this cycle.</li>
+<li><code>World.remove_body</code>/<code>remove_joint</code>'s swap-remove no longer silently
+  misdirects a stale <code>RigidBody</code>/<code>DistanceJoint</code> handle to the wrong
+  entity, and no longer leaves a joint dangling after the body it
+  referenced is removed (see Added, above). Removed the now-obsolete
+  "swap-remove" and "no joint cleanup" bullets from
+  <a href="../limitations/">Known limitations</a>/<code>README.md</code>.</li>
+<li>The GJK/EPA collision core (introduced this cycle, see Added) no
+  longer produces a degenerate zero-length normal for pairs whose
+  centers happen to lie on a common axis (e.g. two spheres stacked
+  along X) -- a routine, not edge-case, configuration. Fixed by seeding
+  the search off-axis, retrying with alternate seeds and keeping the
+  largest-penetration non-degenerate result when one still converges
+  poorly, and (for <code>ConvexHull</code>) averaging tied support vertices instead
+  of arbitrarily picking one.</li>
+</ul>
+<h3 id="documented">Documented</h3>
+<ul>
+<li>Newly-discovered limitation: joints solve once per step with no inner
+  iteration loop, so a joint chain longer than ~2-3 links sags well past
+  its <code>rest_length</code> (found while writing <code>joint_chain_demo.py</code>; tracked
+  in <a href="../roadmap/">Roadmap</a>/<a href="../limitations/">Known limitations</a>, not
+  fixed yet).</li>
+</ul>
+<h2 id="initial-implementation">Initial implementation</h2>
+<ul>
+<li><code>Vec3</code> / <code>Quat</code>: 3D vector and rotation-quaternion math.</li>
+<li><code>Box3D</code>: an axis-aligned or oriented box (AABB/OBB) with
+  point-containment, SAT-based overlap, and ray-cast queries.</li>
+<li><code>RigidBody</code> / <code>World</code>: box-scoped rigid-body dynamics -- mass/inertia,
+  semi-implicit Euler integration, naive O(n²) collision detection, and
+  impulse-based contact resolution.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
