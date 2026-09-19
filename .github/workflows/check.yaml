@@ -53,6 +53,7 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
+          enable-cache: false   # this job builds with cmake, never runs uv sync
 
       - name: Configure
         run: cmake -S . -B build -DBOX3D_WERROR=ON
