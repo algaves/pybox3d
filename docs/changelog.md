@@ -5,11 +5,12 @@ Mirrors
 at the repo root -- keep both in sync when either changes.
 
 All notable changes to `pybox3d` are documented here. Loosely follows
-[Keep a Changelog](https://keepachangelog.com/en/1.1.0/); no version has
-been tagged/released yet, so everything so far lives under Unreleased.
-See [Roadmap](roadmap.md) for what's still missing.
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/). See
+[Roadmap](roadmap.md) for what's still missing.
 
 ## [Unreleased]
+
+## [2026b0] - 2026-09-19
 
 ### Added
 

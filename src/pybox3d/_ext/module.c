@@ -17,7 +17,7 @@
 #include "py_worldsnapshot.h"
 #include "py_character.h"
 
-#define PYBOX3D_VERSION "0.1.0"
+#define PYBOX3D_VERSION "2026b0"
 
 static PyModuleDef pybox3d_module = {
     PyModuleDef_HEAD_INIT,

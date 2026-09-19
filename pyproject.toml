@@ -1,6 +1,6 @@
 [project]
 name = "pybox3d"
-version = "2026a2"
+version = "2026b0"
 description = "Python bindings (CPython C-API) for libbox3d, a 3D box geometry + rigid-body physics library"
 readme = "README.md"
 authors = [
