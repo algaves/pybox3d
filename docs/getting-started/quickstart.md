@@ -44,6 +44,27 @@ That covers the whole API surface in one breath. The
 and the [Examples](../examples/index.md) show complete runnable programs
 from `examples/`.
 
+## Working with NumPy
+
+`Vec3` and `Quat` convert to and from NumPy, and anywhere the API takes a
+`VecLike`/`QuatLike` a NumPy array works directly:
+
+```python
+import numpy as np
+from pybox3d import RigidBody, Vec3, World
+
+world = World(gravity=(0, -9.81, 0))
+body = world.add_body(RigidBody(np.array([0, 5, 0]), np.array([0.5, 0.5, 0.5]), mass=1.0))
+
+for _ in range(300):
+    world.step(1 / 60)
+
+pos = body.position.to_numpy()  # float32 ndarray, shape (3,)
+np.asarray(body.linear_velocity)  # zero-copy, read-only view
+```
+
+See [NumPy interop](numpy-interop.md) for the full conversion API.
+
 ## Working on the docs
 
 See [Documentation](documentation.md).

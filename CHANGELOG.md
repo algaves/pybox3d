@@ -12,6 +12,10 @@ See [TODO.md](TODO.md) for what's still missing.
 
 ### Added
 
+- NumPy interop: `Vec3`/`Quat` gained `to_numpy()`/`from_numpy()` and a
+  read-only buffer protocol (zero-copy `np.asarray()`), and `VecLike`/
+  `QuatLike` now formally include NumPy arrays. NumPy (`>=1.24`) is now a
+  runtime dependency. See `docs/getting-started/numpy-interop.md`.
 - Precompiled wheels: extended the `manylinux` matrix with ARMv7
   (`armv7l`), PPC64LE (`ppc64le`), and RISC-V (`riscv64`); added
   `musllinux` wheels (x86_64, ARM64, ARMv7, PPC64LE); added a

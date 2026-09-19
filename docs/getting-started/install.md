@@ -3,6 +3,8 @@
 ## Requirements
 
 - Python 3.10+
+- NumPy 1.24+ (a runtime dependency, installed automatically with
+  `pybox3d` — see [NumPy interop](numpy-interop.md))
 - [`uv`](https://docs.astral.sh/uv/) (recommended) or `pip`
 - A C compiler and CMake (used by the `scikit-build-core` build backend,
   only needed when installing from source)
