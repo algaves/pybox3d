@@ -1,6 +1,6 @@
 # pybox3d
 
-A dependency-free 3D rigid-body physics library, bound via the pure CPython C API.
+A 3D rigid-body physics library with a NumPy-native binding, via the pure CPython C API.
 
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/algaves/pybox3d.svg?style=flat-square)
 ![Python - Version](https://img.shields.io/badge/python-%3E%3D3.10-brightgreen?style=flat-square)
@@ -29,9 +29,19 @@ pip install .                                              # from a local checko
 pip install git+https://github.com/algaves/pybox3d.git     # straight from GitHub
 ```
 
-Prebuilt wheels ship for Python 3.10-3.14 on Windows (x86_64), Linux
-(x86_64 and ARM64), and macOS (x86_64 and ARM64). Source installs build
-`libbox3d` and the C extension at install time and need nothing else.
+Prebuilt wheels ship for Python 3.10-3.14 on:
+
+- **Windows**: x86_64, ARM64
+- **Linux** (manylinux): x86_64, ARM64, ARMv7, PPC64LE, RISC-V (rv64gc)
+- **Linux** (musllinux, e.g. Alpine): x86_64, ARM64, ARMv7, PPC64LE
+- **macOS**: x86_64, ARM64
+
+ARMv6 and BSD (FreeBSD, OpenBSD, etc.) have no precompiled-wheel platform
+tag to target and are source-install-only; `pip install pybox3d` on those
+platforms compiles `libbox3d` and the C extension locally (the code is
+portable ANSI C11 with no platform-specific paths, so this works out of
+the box). Source installs build `libbox3d` and the C extension at install
+time and need nothing else.
 
 ## Quick Start
 
