@@ -195,3 +195,16 @@ def test_more_solver_iterations_reduces_joint_chain_sag():
     sag_default = abs(expected - _chain_sag(solver_iterations=4))
 
     assert sag_default < sag_one_iteration
+
+
+def test_add_joint_rejects_nan_and_inf_numeric_arguments():
+    world = World(gravity=(0, 0, 0))
+    a = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.1, 0.1, 0.1), mass=1.0))
+    b = world.add_body(RigidBody(Vec3(2, 0, 0), Vec3(0.1, 0.1, 0.1), mass=1.0))
+
+    with pytest.raises(ValueError):
+        world.add_joint(a, b, rest_length=float("nan"))
+    with pytest.raises(ValueError):
+        world.add_joint(a, b, stiffness=float("inf"))
+    with pytest.raises(ValueError):
+        world.add_joint(a, b, min_length=float("nan"), max_length=2.0)

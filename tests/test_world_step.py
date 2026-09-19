@@ -115,3 +115,19 @@ def test_removed_body_handle_raises_on_access():
     world.remove_body(0)
     with pytest.raises(ValueError):
         _ = handle.position
+
+
+def test_step_rejects_nan_and_inf_dt():
+    world = World(gravity=(0, 0, 0))
+    with pytest.raises(ValueError):
+        world.step(float("nan"))
+    with pytest.raises(ValueError):
+        world.step(float("inf"))
+
+
+def test_sleep_thresholds_reject_nan_and_inf():
+    world = World(gravity=(0, 0, 0))
+    with pytest.raises(ValueError):
+        world.sleep_linear_threshold = float("nan")
+    with pytest.raises(ValueError):
+        world.sleep_time_threshold = float("inf")

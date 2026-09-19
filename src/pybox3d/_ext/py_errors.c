@@ -1,5 +1,7 @@
 #include "py_errors.h"
 
+#include <math.h>
+
 PyObject *PyBox3D_Error = NULL;
 PyObject *PyBox3D_CapacityError = NULL;
 
@@ -21,6 +23,21 @@ int pybox3d_errors_init(PyObject *module) {
     }
 
     return 0;
+}
+
+int pybox3d_require_finite(double v, const char *what) {
+    if (isfinite(v)) {
+        return 0;
+    }
+    /* PyErr_Format has no float-formatting verb, so build the message via
+     * PyFloat_FromDouble + %R (repr) instead. */
+    PyObject *value = PyFloat_FromDouble(v);
+    if (value == NULL) {
+        return -1;
+    }
+    PyErr_Format(PyExc_ValueError, "%s must be finite, got %R", what, value);
+    Py_DECREF(value);
+    return -1;
 }
 
 int pybox3d_status_to_exception(b3_Status status, const char *context) {

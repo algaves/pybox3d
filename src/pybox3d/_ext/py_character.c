@@ -2,6 +2,7 @@
 #include "py_vec3.h"
 #include "py_shape.h"
 #include "py_world.h"
+#include "py_errors.h"
 
 static PyObject *character_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     static char *kwlist[] = {"position", "shape", NULL};
@@ -82,6 +83,7 @@ static int character_set_skin_width(PyCharacterMoverObject *self, PyObject *valu
     }
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "skin_width") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "skin_width must be >= 0");
         return -1;
@@ -122,6 +124,7 @@ static int character_set_ground_normal_min_y(PyCharacterMoverObject *self, PyObj
     }
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "ground_normal_min_y") < 0) return -1;
     self->value.ground_normal_min_y = (b3_real)v;
     return 0;
 }

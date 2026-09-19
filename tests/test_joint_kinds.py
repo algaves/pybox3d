@@ -368,3 +368,34 @@ def test_remove_body_also_drops_new_kind_joints():
     assert world.joint_count == 0
     with pytest.raises(ValueError):
         _ = joint.anchor_a
+
+
+def test_revolute_and_wheel_joints_reject_nan_and_inf_numeric_arguments():
+    world = World(gravity=(0, 0, 0))
+    a = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.1, 0.1, 0.1), mass=0.0))
+    b = world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(0.1, 0.1, 0.1), mass=1.0))
+
+    with pytest.raises(ValueError):
+        world.add_revolute_joint(a, b, axis=Vec3(0, 1, 0), motor_speed=float("nan"))
+    with pytest.raises(ValueError):
+        world.add_revolute_joint(a, b, axis=Vec3(0, 1, 0), max_motor_effort=float("inf"))
+    with pytest.raises(ValueError):
+        world.add_wheel_joint(
+            a,
+            b,
+            suspension_axis=Vec3(0, 1, 0),
+            axle_axis=Vec3(1, 0, 0),
+            suspension_stiffness=float("nan"),
+        )
+
+
+def test_joint_setters_reject_nan_and_inf():
+    world = World(gravity=(0, 0, 0))
+    a = world.add_body(RigidBody(Vec3(0, 0, 0), Vec3(0.1, 0.1, 0.1), mass=0.0))
+    b = world.add_body(RigidBody(Vec3(1, 0, 0), Vec3(0.1, 0.1, 0.1), mass=1.0))
+    joint = world.add_revolute_joint(a, b, axis=Vec3(0, 1, 0), enable_motor=True)
+
+    with pytest.raises(ValueError):
+        joint.motor_speed = float("nan")
+    with pytest.raises(ValueError):
+        joint.max_motor_effort = float("inf")

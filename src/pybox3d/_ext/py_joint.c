@@ -3,6 +3,7 @@
 #include "py_rigidbody.h"
 #include "py_vec3.h"
 #include "py_quat.h"
+#include "py_errors.h"
 
 PyObject *PyDistanceJoint_FromWorldId(PyObject *world, b3_JointId id) {
     PyDistanceJointObject *self = PyObject_New(PyDistanceJointObject, &PyDistanceJoint_Type);
@@ -73,6 +74,7 @@ static int joint_set_rest_length(PyDistanceJointObject *self, PyObject *value, v
     if (joint == NULL) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "rest_length") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "rest_length must be >= 0");
         return -1;
@@ -131,6 +133,7 @@ static int joint_set_min_length(PyDistanceJointObject *self, PyObject *value, vo
     if (joint == NULL) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "min_length") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "min_length must be >= 0");
         return -1;
@@ -155,6 +158,7 @@ static int joint_set_max_length(PyDistanceJointObject *self, PyObject *value, vo
     if (joint == NULL) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "max_length") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "max_length must be >= 0");
         return -1;
@@ -199,6 +203,7 @@ static int joint_set_stiffness(PyDistanceJointObject *self, PyObject *value, voi
     if (joint == NULL) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "stiffness") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "stiffness must be >= 0");
         return -1;
@@ -223,6 +228,7 @@ static int joint_set_damping(PyDistanceJointObject *self, PyObject *value, void 
     if (joint == NULL) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "damping") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "damping must be >= 0");
         return -1;
@@ -535,6 +541,7 @@ static int pyjoint_set_min_translation(PyJointObject *self, PyObject *value, voi
     if (joint_require_kind2(joint, "min_translation", B3_JOINT_PRISMATIC, B3_JOINT_WHEEL) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "min_translation") < 0) return -1;
     if (joint->kind == B3_JOINT_PRISMATIC) {
         joint->params.prismatic.min_translation = (b3_real)v;
     } else {
@@ -563,6 +570,7 @@ static int pyjoint_set_max_translation(PyJointObject *self, PyObject *value, voi
     if (joint_require_kind2(joint, "max_translation", B3_JOINT_PRISMATIC, B3_JOINT_WHEEL) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "max_translation") < 0) return -1;
     if (joint->kind == B3_JOINT_PRISMATIC) {
         joint->params.prismatic.max_translation = (b3_real)v;
     } else {
@@ -619,6 +627,7 @@ static int pyjoint_set_motor_speed(PyJointObject *self, PyObject *value, void *c
     if (joint_require_kind2(joint, "motor_speed", B3_JOINT_REVOLUTE, B3_JOINT_PRISMATIC) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "motor_speed") < 0) return -1;
     if (joint->kind == B3_JOINT_REVOLUTE) {
         joint->params.revolute.motor_speed = (b3_real)v;
     } else {
@@ -647,6 +656,7 @@ static int pyjoint_set_max_motor_effort(PyJointObject *self, PyObject *value, vo
     if (joint_require_kind2(joint, "max_motor_effort", B3_JOINT_REVOLUTE, B3_JOINT_PRISMATIC) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "max_motor_effort") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "max_motor_effort must be >= 0");
         return -1;
@@ -677,6 +687,7 @@ static int pyjoint_set_suspension_stiffness(PyJointObject *self, PyObject *value
     if (joint_require_kind2(joint, "suspension_stiffness", B3_JOINT_WHEEL, B3_JOINT_WHEEL) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "suspension_stiffness") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "suspension_stiffness must be >= 0");
         return -1;
@@ -703,6 +714,7 @@ static int pyjoint_set_suspension_damping(PyJointObject *self, PyObject *value, 
     if (joint_require_kind2(joint, "suspension_damping", B3_JOINT_WHEEL, B3_JOINT_WHEEL) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "suspension_damping") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "suspension_damping must be >= 0");
         return -1;
@@ -767,6 +779,7 @@ static int pyjoint_set_linear_stiffness(PyJointObject *self, PyObject *value, vo
     if (joint_require_kind2(joint, "linear_stiffness", B3_JOINT_MOTOR, B3_JOINT_MOTOR) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "linear_stiffness") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "linear_stiffness must be >= 0");
         return -1;
@@ -793,6 +806,7 @@ static int pyjoint_set_linear_damping(PyJointObject *self, PyObject *value, void
     if (joint_require_kind2(joint, "linear_damping", B3_JOINT_MOTOR, B3_JOINT_MOTOR) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "linear_damping") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "linear_damping must be >= 0");
         return -1;
@@ -819,6 +833,7 @@ static int pyjoint_set_angular_stiffness(PyJointObject *self, PyObject *value, v
     if (joint_require_kind2(joint, "angular_stiffness", B3_JOINT_MOTOR, B3_JOINT_MOTOR) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "angular_stiffness") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "angular_stiffness must be >= 0");
         return -1;
@@ -845,6 +860,7 @@ static int pyjoint_set_angular_damping(PyJointObject *self, PyObject *value, voi
     if (joint_require_kind2(joint, "angular_damping", B3_JOINT_MOTOR, B3_JOINT_MOTOR) < 0) return -1;
     double v = PyFloat_AsDouble(value);
     if (v == -1.0 && PyErr_Occurred()) return -1;
+    if (pybox3d_require_finite(v, "angular_damping") < 0) return -1;
     if (v < 0.0) {
         PyErr_SetString(PyExc_ValueError, "angular_damping must be >= 0");
         return -1;

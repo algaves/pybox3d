@@ -220,3 +220,20 @@ def test_character_mover_move_requires_a_world():
 
     with pytest.raises(TypeError):
         mover.move("not a world", Vec3(0, 0, 0))  # type: ignore[arg-type]
+
+
+def test_character_mover_rejects_nan_and_inf():
+    world = World(gravity=(0, 0, 0))
+    shape = Box3D(Vec3(0, 0, 0), Vec3(0.4, 0.9, 0.4))
+    mover = CharacterMover(Vec3(0, 0, 0), shape)
+
+    with pytest.raises(ValueError):
+        mover.position = Vec3(float("nan"), 0, 0)
+    with pytest.raises(ValueError):
+        mover.velocity = Vec3(0, float("inf"), 0)
+    with pytest.raises(ValueError):
+        mover.skin_width = float("nan")
+    with pytest.raises(ValueError):
+        mover.ground_normal_min_y = float("inf")
+    with pytest.raises(ValueError):
+        mover.move(world, Vec3(float("nan"), 0, 0))
