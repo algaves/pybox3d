@@ -37,8 +37,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
+            name: linux-native
             cibw-archs-linux: "auto aarch64"
+          - os: ubuntu-latest
+            name: linux-qemu-exotic
+            cibw-archs-linux: "armv7l ppc64le riscv64"
           - os: windows-latest
+            cibw-archs-windows: "AMD64 ARM64"
           - os: macos-15
           - os: macos-15-intel
 
@@ -55,10 +60,11 @@ jobs:
         uses: pypa/cibuildwheel@v4.2.1
         env:
           CIBW_ARCHS_LINUX: ${{ matrix.cibw-archs-linux }}
+          CIBW_ARCHS_WINDOWS: ${{ matrix.cibw-archs-windows }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ matrix.os }}
+          name: wheels-${{ matrix.os }}-${{ matrix.name || 'default' }}
           path: wheelhouse/*.whl
           if-no-files-found: error
 

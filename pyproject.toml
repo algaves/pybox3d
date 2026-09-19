@@ -8,7 +8,7 @@ authors = [
     { name = "Diego-Sealtiel Valderrama Garcia", email = "sealtielfreak@yandex.com" },
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["numpy>=1.24"]
 license = "0BSD"
 license-files = ["LICENSE.md"]
 keywords = ["physics", "3d", "collision", "rigid-body", "box", "cpython-c-api"]
@@ -47,9 +47,12 @@ sdist.exclude = ["docs", "tests", "examples", ".github", "mkdocs.yml", "uv.lock"
 
 [tool.cibuildwheel]
 build = "cp310-* cp311-* cp312-* cp313-* cp314-*"
-skip = "cp31?t-* *musllinux*"
+skip = "cp31?t-*"
 test-requires = "pytest>=8"
 test-command = "pytest {project}/tests"
+
+[tool.cibuildwheel.windows]
+test-skip = "*-win_arm64"
 
 [dependency-groups]
 dev = [
@@ -81,6 +84,14 @@ files = ["src/pybox3d", "tests", "examples"]
 [[tool.mypy.overrides]]
 module = "pybox3d._pybox3d"
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["numpy", "numpy.*"]
+# NumPy >= 2.5 (installed on Python >= 3.12) ships stubs using PEP 695
+# `type` statements, which mypy cannot parse at python_version = "3.10".
+# NumPy's typing is not part of this project's public API, so don't analyze it.
+follow_imports = "skip"
+follow_imports_for_stubs = true
 
 [[tool.mypy.overrides]]
 module = [

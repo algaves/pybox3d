@@ -8,6 +8,9 @@ Python bindings, written directly against the **CPython C API** (no
 ctypes/cffi/pybind11/nanobind), for `libbox3d` — a small, from-scratch
 C library providing:
 
+- **`Vec3`** / **`Quat`** — vectors and rotations with NumPy-native
+  conversion (`to_numpy()`/`from_numpy()`, plus a zero-copy, read-only
+  buffer for `np.asarray`); see [NumPy interop](getting-started/numpy-interop.md).
 - **`Box3D`** / **`Sphere`** / **`Capsule`** / **`ConvexHull`** /
   **`Compound`** / **`TriangleMesh`** / **`HeightField`** — 3D shapes
   with point-containment, overlap (exact SAT for box-vs-box, a generic
@@ -20,6 +23,10 @@ C library providing:
   bodies: a rigid-or-spring distance constraint (pendulums, chains, ...),
   plus Spherical, Revolute, Prismatic, Weld, Motor, Wheel, Filter, and
   Parallel.
+
+The C core (`libbox3d`) stays zero-dependency; the Python package has
+exactly one runtime dependency, NumPy, for the `Vec3`/`Quat` conversion
+API.
 
 ## Layout
 

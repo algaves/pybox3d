@@ -3,6 +3,8 @@
 ## Requirements
 
 - Python 3.10+
+- NumPy 1.24+ (a runtime dependency, installed automatically with
+  `pybox3d` — see [NumPy interop](numpy-interop.md))
 - [`uv`](https://docs.astral.sh/uv/) (recommended) or `pip`
 - A C compiler and CMake (used by the `scikit-build-core` build backend,
   only needed when installing from source)
@@ -11,9 +13,30 @@
 
 `pybox3d` ships prebuilt wheels for Python 3.10-3.14 on:
 
-- **Windows** (x86_64)
-- **Linux** (x86_64 and ARM64, `manylinux`)
-- **macOS** (x86_64 and ARM64)
+- **Windows**: x86_64 (`win_amd64`), ARM64 (`win_arm64`, build-only --
+  see note below)
+- **Linux, `manylinux`**: x86_64, ARM64 (`aarch64`), ARMv7 (`armv7l`),
+  PPC64LE (`ppc64le`), RISC-V (`riscv64`)
+- **Linux, `musllinux`** (e.g. Alpine): x86_64, ARM64 (`aarch64`), ARMv7
+  (`armv7l`), PPC64LE (`ppc64le`) -- no musllinux wheel for RISC-V yet,
+  since no musllinux RISC-V platform image exists
+- **macOS**: x86_64, ARM64
+
+!!! note "Windows ARM64 is build-only"
+    There's no ARM64 Windows GitHub Actions runner, so the `win_arm64`
+    wheel is cross-compiled but never executed in CI (its tests are
+    skipped for that target specifically). It's expected to work -- the
+    C code has no architecture-specific paths -- but hasn't been run
+    against the test suite the way every other platform's wheel has.
+
+!!! note "ARMv6 and BSD are source-install-only"
+    ARMv6 (no `manylinux`/`musllinux` platform tag exists for it) and
+    BSD variants such as FreeBSD/OpenBSD (no CI runners or wheel platform
+    tag ecosystem) don't get a precompiled wheel. `pip install pybox3d`
+    on these platforms falls back to a source build automatically --
+    `libbox3d` is portable ANSI C11 with no platform-specific code, so
+    this works without any extra steps, just a C compiler and CMake (see
+    "Requirements" above).
 
 Installing from a wheel needs no C toolchain:
 

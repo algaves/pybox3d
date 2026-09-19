@@ -13,6 +13,17 @@ See [Roadmap](roadmap.md) for what's still missing.
 
 ### Added
 
+- NumPy interop: [`Vec3`](reference/classes/vec3.md) and
+  [`Quat`](reference/classes/quat.md) gained `to_numpy()`/`from_numpy()`
+  and a read-only buffer protocol (zero-copy `np.asarray()`), and
+  `VecLike`/`QuatLike` now formally include NumPy arrays. NumPy (`>=1.24`)
+  is now a runtime dependency. See [NumPy interop](getting-started/numpy-interop.md).
+- Precompiled wheels: extended the `manylinux` matrix with ARMv7
+  (`armv7l`), PPC64LE (`ppc64le`), and RISC-V (`riscv64`); added
+  `musllinux` wheels (x86_64, ARM64, ARMv7, PPC64LE); added a
+  cross-compiled, build-only Windows ARM64 (`win_arm64`) wheel. ARMv6 and
+  BSD remain source-install-only -- no platform tag exists for them. See
+  [Installation](getting-started/install.md) for the full matrix.
 - Utilities: [CharacterMover](reference/classes/charactermover.md) (a
   kinematic move-and-slide character controller -- construct with a
   position and any of the seven shape types, then call `.move(world,

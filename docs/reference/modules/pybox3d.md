@@ -28,11 +28,14 @@ pybox3d.ContactInfo, pybox3d.RayHit
 
 | Name | Meaning |
 |---|---|
-| `VecLike` | `Vec3` or any 3-element `Sequence[float]` (tuple, list, ...). |
-| `QuatLike` | `Quat` or any 4-element `Sequence[float]`. |
+| `VecLike` | `Vec3`, any 3-element `Sequence[float]` (tuple, list, ...), or a length-3 NumPy array. |
+| `QuatLike` | `Quat`, any 4-element `Sequence[float]`, or a length-4 NumPy array. |
 
 Anywhere the API accepts a vector, `VecLike` works; anywhere it accepts a
-quaternion, `QuatLike` works.
+quaternion, `QuatLike` works. `Vec3`/`Quat` convert both ways with NumPy
+(`to_numpy()`/`from_numpy()`, plus a read-only buffer for zero-copy
+`np.asarray`) — see [Vec3](../classes/vec3.md#numpy-interop) and
+[Quat](../classes/quat.md#numpy-interop).
 
 ## Exceptions
 

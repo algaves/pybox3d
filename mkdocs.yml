@@ -47,6 +47,7 @@ nav:
   - Getting started:
       - Installation: getting-started/install.md
       - Quickstart: getting-started/quickstart.md
+      - NumPy interop: getting-started/numpy-interop.md
       - Documentation: getting-started/documentation.md
   - Tutorials:
       - Overview: tutorials/index.md

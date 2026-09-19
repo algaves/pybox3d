@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 from pybox3d import Quat, Vec3
@@ -104,3 +105,68 @@ def test_quat_construction_rejects_nan_and_inf():
         Quat(float("nan"), 0, 0, 1)
     with pytest.raises(ValueError):
         Quat(0, 0, 0, float("inf"))
+
+
+def test_vec3_like_accepts_numpy_array():
+    arr = np.array([1.0, 2.0, 3.0])
+    assert Vec3(1, 0, 0).dot(arr) == pytest.approx(1.0)
+
+
+def test_vec3_to_numpy():
+    v = Vec3(1, 2, 3)
+    arr = v.to_numpy()
+    assert isinstance(arr, np.ndarray)
+    assert arr.dtype == np.float32
+    assert arr.shape == (3,)
+    assert arr.tolist() == pytest.approx([1.0, 2.0, 3.0])
+
+
+def test_vec3_to_numpy_is_an_independent_copy():
+    v = Vec3(1, 2, 3)
+    arr = v.to_numpy()
+    arr[0] = 99.0
+    assert v.x == pytest.approx(1.0)
+
+
+def test_vec3_from_numpy():
+    v = Vec3.from_numpy(np.array([4.0, 5.0, 6.0]))
+    assert v.to_tuple() == pytest.approx((4.0, 5.0, 6.0))
+
+
+def test_vec3_asarray_is_zero_copy():
+    v = Vec3(1, 2, 3)
+    arr = np.asarray(v)
+    assert arr.dtype == np.float32
+    assert np.shares_memory(arr, v)
+
+
+def test_vec3_buffer_is_read_only():
+    v = Vec3(1, 2, 3)
+    arr = np.asarray(v)
+    assert arr.flags.writeable is False
+    with pytest.raises(ValueError):
+        arr[0] = 99.0
+    with pytest.raises((TypeError, BufferError)):
+        # Vec3 supports the buffer protocol via the C-level tp_as_buffer
+        # slot, not a Python-visible __buffer__ dunder, so typeshed's
+        # Buffer protocol doesn't see it.
+        memoryview(v)[0:4] = b"\x00\x00\x00\x00"  # type: ignore[arg-type]
+
+
+def test_quat_to_numpy():
+    q = Quat(1, 2, 3, 4)
+    arr = q.to_numpy()
+    assert arr.dtype == np.float32
+    assert arr.shape == (4,)
+    assert arr.tolist() == pytest.approx([1.0, 2.0, 3.0, 4.0])
+
+
+def test_quat_from_numpy():
+    q = Quat.from_numpy(np.array([0.0, 0.0, 0.0, 1.0]))
+    assert q == Quat(0, 0, 0, 1)
+
+
+def test_quat_asarray_is_zero_copy():
+    q = Quat(0, 0, 0, 1)
+    arr = np.asarray(q)
+    assert np.shares_memory(arr, q)
