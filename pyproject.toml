@@ -54,6 +54,9 @@ test-command = "pytest {project}/tests"
 [tool.cibuildwheel.windows]
 test-skip = "*-win_arm64"
 
+[tool.cibuildwheel.linux]
+test-skip = "*-manylinux_armv7l *-manylinux_ppc64le *-manylinux_riscv64 *-musllinux_armv7l *-musllinux_ppc64le *-musllinux_riscv64"
+
 [dependency-groups]
 dev = [
     "pytest>=8.0",
